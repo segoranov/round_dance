@@ -1,40 +1,29 @@
 #include "chorb_dancer.hpp"
 
-AdjacentDancersInfo::AdjacentDancersInfo(ChorbDancer* dancerToTheLeft,
-                                         bool grabbedDancerToTheLeft,
-                                         ChorbDancer* dancerToTheRight,
-                                         bool grabbedDancerToTheRight)
-    : dancerToTheLeft{dancerToTheLeft},
-      grabbedDancerToTheLeft{grabbedDancerToTheLeft},
-      dancerToTheRight{dancerToTheRight},
-      grabbedDancerToTheRight{grabbedDancerToTheRight} {}
+ChorbDancer::ChorbDancer(const std::string& nickname) : nickname{nickname} {}
 
-ChorbDancer::ChorbDancer(const std::string& nickname,
-                         const AdjacentDancersInfo& adjacentDancersInfo)
-    : nickname{nickname}, adjacentDancersInfo{adjacentDancersInfo} {}
-
-bool ChorbDancer::hasGrabbedLeftDancer() const noexcept {
-  return adjacentDancersInfo.grabbedDancerToTheLeft;
+bool ChorbDancer::hasGrabbedDancerToTheLeft() const noexcept {
+  return grabbedDancerToTheLeft;
 }
 
-void ChorbDancer::grabLeftDancer() {
-  adjacentDancersInfo.grabbedDancerToTheLeft = true;
+void ChorbDancer::grabLeftDancer() { grabbedDancerToTheLeft = true; }
+
+void ChorbDancer::releaseLeftDancer() { grabbedDancerToTheLeft = false; }
+
+void ChorbDancer::setLeftDancer(ChorbDancer* dancer) {
+  dancerToTheLeft = dancer;
 }
 
-void ChorbDancer::releaseLeftDancer() {
-  adjacentDancersInfo.grabbedDancerToTheLeft = false;
+bool ChorbDancer::hasGrabbedDancerToTheRight() const noexcept {
+  return grabbedDancerToTheRight;
 }
 
-bool ChorbDancer::hasGrabbedRightDancer() const noexcept {
-  return adjacentDancersInfo.grabbedDancerToTheRight;
-}
+void ChorbDancer::grabRightDancer() { grabbedDancerToTheRight = true; }
 
-void ChorbDancer::grabRightDancer() {
-  adjacentDancersInfo.grabbedDancerToTheRight = true;
-}
+void ChorbDancer::releaseRightDancer() { grabbedDancerToTheRight = false; }
 
-void ChorbDancer::releaseRightDancer() {
-  adjacentDancersInfo.grabbedDancerToTheRight = false;
+void ChorbDancer::setRightDancer(ChorbDancer* dancer) {
+  dancerToTheRight = dancer;
 }
 
 std::string ChorbDancer::getNickname() const noexcept { return nickname; }

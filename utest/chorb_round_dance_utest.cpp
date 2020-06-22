@@ -26,11 +26,11 @@ SCENARIO("Test building of round dance") {
       THEN(
           "All the dancers should have grabbed their left and right partners") {
         auto it = dancers.begin();
-        REQUIRE(it->hasGrabbedLeftDancer() && it->hasGrabbedRightDancer());
+        REQUIRE(it->hasGrabbedDancerToTheLeft() && it->hasGrabbedDancerToTheRight());
         ++it;
-        REQUIRE(it->hasGrabbedLeftDancer() && it->hasGrabbedRightDancer());
+        REQUIRE(it->hasGrabbedDancerToTheLeft() && it->hasGrabbedDancerToTheRight());
         ++it;
-        REQUIRE(it->hasGrabbedLeftDancer() && it->hasGrabbedRightDancer());
+        REQUIRE(it->hasGrabbedDancerToTheLeft() && it->hasGrabbedDancerToTheRight());
       }
     }
   }

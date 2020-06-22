@@ -7,34 +7,28 @@
 
 class ChorbDancer;
 
-struct AdjacentDancersInfo {
-  AdjacentDancersInfo(ChorbDancer* dancerToTheLeft, bool grabbedDancerToTheLeft,
-                      ChorbDancer* dancerToTheRight,
-                      bool grabbedDancerToTheRight);
+class ChorbDancer {
+ private:
+  std::string nickname;
 
   ChorbDancer* dancerToTheLeft;
   bool grabbedDancerToTheLeft;
 
   ChorbDancer* dancerToTheRight;
   bool grabbedDancerToTheRight;
-};
-
-class ChorbDancer {
- private:
-  std::string nickname;
-  AdjacentDancersInfo adjacentDancersInfo;
 
  public:
-  explicit ChorbDancer(const std::string& nickname,
-                       const AdjacentDancersInfo& adjacentDancersInfo);
+  explicit ChorbDancer(const std::string& nickname);
 
-  bool hasGrabbedLeftDancer() const noexcept;
+  bool hasGrabbedDancerToTheLeft() const noexcept;
   void grabLeftDancer();
   void releaseLeftDancer();
+  void setLeftDancer(ChorbDancer* dancer);
 
-  bool hasGrabbedRightDancer() const noexcept;
+  bool hasGrabbedDancerToTheRight() const noexcept;
   void grabRightDancer();
   void releaseRightDancer();
+  void setRightDancer(ChorbDancer* dancer);
 
   std::string getNickname() const noexcept;
 };
