@@ -8,7 +8,7 @@
 
 class RoundDanceBuilder {
  public:
-  virtual void addDancer(const std::string& nickName) = 0;
+  virtual void addDancer(const std::string& nickname) = 0;
   virtual ChorbRoundDance getRoundDance() const = 0;
 };
 
@@ -17,7 +17,7 @@ class ChorbRoundDanceBuilder : public RoundDanceBuilder {
   ChorbRoundDance dance;
 
  public:
-  virtual void addDancer(const std::string& nickName) override;
+  virtual void addDancer(const std::string& nickname) override;
   virtual ChorbRoundDance getRoundDance() const override;
 };
 

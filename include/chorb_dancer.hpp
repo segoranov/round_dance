@@ -21,11 +21,11 @@ struct AdjacentDancersInfo {
 
 class ChorbDancer {
  private:
-  std::string nickName;
+  std::string nickname;
   AdjacentDancersInfo adjacentDancersInfo;
 
  public:
-  explicit ChorbDancer(const std::string& nickName,
+  explicit ChorbDancer(const std::string& nickname,
                        const AdjacentDancersInfo& adjacentDancersInfo);
 
   bool hasGrabbedLeftDancer() const noexcept;

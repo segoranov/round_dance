@@ -9,9 +9,9 @@ AdjacentDancersInfo::AdjacentDancersInfo(ChorbDancer* dancerToTheLeft,
       dancerToTheRight{dancerToTheRight},
       grabbedDancerToTheRight{grabbedDancerToTheRight} {}
 
-ChorbDancer::ChorbDancer(const std::string& nickName,
+ChorbDancer::ChorbDancer(const std::string& nickname,
                          const AdjacentDancersInfo& adjacentDancersInfo)
-    : nickName{nickName}, adjacentDancersInfo{adjacentDancersInfo} {}
+    : nickname{nickname}, adjacentDancersInfo{adjacentDancersInfo} {}
 
 bool ChorbDancer::hasGrabbedLeftDancer() const noexcept {
   return adjacentDancersInfo.grabbedDancerToTheLeft;
