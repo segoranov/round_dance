@@ -1,26 +1,36 @@
 @startuml
 package Model {
-class ChorbDancer
-class ChorbRoundDance
+
+class RoundDance{
++ addDancer(dancer : string) : void
++ removeDancer(dancer : string) : void
++ swapDancers(leftDancer : string, rightDancer : string) : void 
+}
+
+class RoundDancer{
+
+}
+
 }
 
 package View {
+
 interface RoundDanceView {
-+ showRoundDance()
-+ showInfoAboutDancer(dancerInfo: string)
-+ showError(errorMessage: string)
++ showRoundDance() : void
++ showInfoAboutDancer(dancerInfo: string) : void
++ showError(errorMessage: string) : void
 }
 
 class ConsoleRoundDanceView implements RoundDanceView {
-+ showRoundDance(RoundDance)
-+ showInfoAboutDancer(Dancer)
-+ showError(errorMessage: string)
++ showRoundDance(RoundDance) : void
++ showInfoAboutDancer(Dancer) : void
++ showError(errorMessage: string) : void
 }
 
 class MockView implements RoundDanceView {
-+ showRoundDance(RoundDance)
-+ showInfoAboutDancer(Dancer)
-+ showError(errorMessage: string)
++ showRoundDance(RoundDance) : void
++ showInfoAboutDancer(Dancer) : void
++ showError(errorMessage: string) : void
 }
 note top of MockView: Facilitates unit testing
 
