@@ -1,0 +1,24 @@
+#ifndef CHORB_ROUND_DANCE_BUILDER_HPP_220602020
+#define CHORB_ROUND_DANCE_BUILDER_HPP_220602020
+
+#include <string>
+
+#include "chorb_dancer.hpp"
+#include "chorb_round_dance.hpp"
+
+class RoundDanceBuilder {
+ public:
+  virtual void addDancer(const std::string& nickName) = 0;
+  virtual ChorbRoundDance getRoundDance() const = 0;
+};
+
+class ChorbRoundDanceBuilder : public RoundDanceBuilder {
+ private:
+  ChorbRoundDance dance;
+
+ public:
+  virtual void addDancer(const std::string& nickName) override;
+  virtual ChorbRoundDance getRoundDance() const override;
+};
+
+#endif
