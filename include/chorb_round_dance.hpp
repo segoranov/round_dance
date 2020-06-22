@@ -3,6 +3,7 @@
 
 #include <list>
 #include <optional>
+#include <unordered_map>
 
 class ChorbDancer;
 
@@ -19,13 +20,9 @@ class ChorbRoundDance {
 
  private:
   std::list<ChorbDancer> dancers;
+  std::unordered_map<std::string, ChorbDancer*> mapNicknameToDancer;
 
  public:
-  // TODO DV format/improve doc
-  // We want the user to create the round dance with the builder/factory,
-  // not with constructor
-  ChorbRoundDance() = delete;
-
   // TODO DV add doc
   bool addDancer(const std::string& newDancer, const std::string& leftDancer,
                  const std::string& rightDancer);
@@ -50,7 +47,9 @@ class ChorbRoundDance {
    * Returns the dancer if he exists in the dance; otherwise empty optional
    * TODO DV format/improve doc
    */
-  std::optional<ChorbDancer> getDancer(const std::string& dancer);
+  std::optional<ChorbDancer> getDancer(const std::string& dancer) const;
+
+  const std::list<ChorbDancer>& getDancers() const;
 };
 
 #endif

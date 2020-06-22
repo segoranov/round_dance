@@ -35,6 +35,8 @@ class ChorbDancer {
   bool hasGrabbedRightDancer() const noexcept;
   void grabRightDancer();
   void releaseRightDancer();
+
+  std::string getNickname() const noexcept;
 };
 
 #endif

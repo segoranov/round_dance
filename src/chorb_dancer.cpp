@@ -36,3 +36,5 @@ void ChorbDancer::grabRightDancer() {
 void ChorbDancer::releaseRightDancer() {
   adjacentDancersInfo.grabbedDancerToTheRight = false;
 }
+
+std::string ChorbDancer::getNickname() const noexcept { return nickname; }
