@@ -14,6 +14,10 @@ void ChorbDancer::setLeftDancer(ChorbDancer* dancer) {
   dancerToTheLeft = dancer;
 }
 
+const ChorbDancer* ChorbDancer::getDancerToTheLeft() const {
+  return dancerToTheLeft;
+}
+
 bool ChorbDancer::hasGrabbedDancerToTheRight() const noexcept {
   return grabbedDancerToTheRight;
 }
@@ -24,6 +28,10 @@ void ChorbDancer::releaseRightDancer() { grabbedDancerToTheRight = false; }
 
 void ChorbDancer::setRightDancer(ChorbDancer* dancer) {
   dancerToTheRight = dancer;
+}
+
+const ChorbDancer* ChorbDancer::getDancerToTheRight() const {
+  return dancerToTheRight;
 }
 
 std::string ChorbDancer::getNickname() const noexcept { return nickname; }

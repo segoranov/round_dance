@@ -1,30 +1,49 @@
 #include "chorb_round_dance_builder/chorb_round_dance_builder.hpp"
 
 void ChorbRoundDanceBuilder::addDancer(const std::string& nickname) {
-  ChorbDancer& previousLastDancer = dance.dancers.back();
-
   dance.dancers.push_back(ChorbDancer{nickname});
   ChorbDancer& newDancer = dance.dancers.back();
 
   if (dance.dancers.size() == 1) {
-    return;  // nothing more to do
+    return;  // Nothing more to do
   }
 
-  // The first dancer in the list grabs the last added dancer
-  // The new dancer will be to the left of the first dancer
+  if (dance.dancers.size() == 2) {
+    // firstDancer <---> newDancer
+    ChorbDancer& firstDancer = dance.dancers.front();
+    firstDancer.setRightDancer(&newDancer);
+    firstDancer.grabRightDancer();
 
-  dance.dancers.front().setLeftDancer(&newDancer);
-  dance.dancers.front().grabLeftDancer();
+    newDancer.setLeftDancer(&firstDancer);
+    newDancer.grabLeftDancer();
 
-  // Grab the first dancer
-  newDancer.setRightDancer(&dance.dancers.front());
+    return;
+  }
+
+  // clang-format off
+
+  // Our situation now looks like this:
+  // newDancer | <--> firstDancer <--> ... <--> previousLastDancer <--> newDancer <--> | firstDancer
+
+  // clang-format on
+
+  // The first dancer grabs the new dancer to the left
+  ChorbDancer& firstDancer = dance.dancers.front();
+  firstDancer.setLeftDancer(&newDancer);
+  firstDancer.grabLeftDancer();
+
+  // The new dancer grabs the first dancer to the right
+  newDancer.setRightDancer(&firstDancer);
   newDancer.grabRightDancer();
 
-  if (dance.dancers.size() > 2) {
-    // Grab the previous last dancer
-    newDancer.setLeftDancer(&previousLastDancer);
-    newDancer.grabLeftDancer();
-  }
+  // The previous last dancer grabs the new dancer to the right
+  ChorbDancer& previousLastDancer = *--(--dance.dancers.end());
+  previousLastDancer.setRightDancer(&newDancer);
+  previousLastDancer.grabRightDancer();
+
+  // The new dancer grabs the previous last dancer to the left
+  newDancer.setLeftDancer(&previousLastDancer);
+  newDancer.grabLeftDancer();
 }
 
 ChorbRoundDance ChorbRoundDanceBuilder::getRoundDance() const { return dance; }
