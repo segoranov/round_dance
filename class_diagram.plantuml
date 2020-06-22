@@ -1,0 +1,42 @@
+@startuml
+package Model {
+class ChorbDancer
+class ChorbRoundDance
+}
+
+package View {
+interface RoundDanceView {
++ showRoundDance()
++ showInfoAboutDancer(dancerInfo: string)
++ showError(errorMessage: string)
+}
+
+class ConsoleRoundDanceView implements RoundDanceView {
++ showRoundDance(RoundDance)
++ showInfoAboutDancer(Dancer)
++ showError(errorMessage: string)
+}
+
+class MockView implements RoundDanceView {
++ showRoundDance(RoundDance)
++ showInfoAboutDancer(Dancer)
++ showError(errorMessage: string)
+}
+note top of MockView: Facilitates unit testing
+
+}
+
+package Presenter {
+class RoundDancePresenter {
++ onAddDancer(Dancer)
++ onRemoveDancer(Dancer)
++ onSwapDancers(Dancer, Dancer)
++ onGrab(who, <left|right|both>)
++ onRelease(who, <left|right|both>)
++ onGetDancerInfo(Dancer)
++ onShowRoundDance()
++ onExit()
+}
+
+}
+@enduml
