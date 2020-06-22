@@ -2,36 +2,36 @@
 
 ChorbDancer::ChorbDancer(const std::string& nickname) : nickname{nickname} {}
 
-bool ChorbDancer::hasGrabbedDancerToTheLeft() const noexcept {
-  return grabbedDancerToTheLeft;
+bool ChorbDancer::hasGrabbedLeftDancer() const noexcept {
+  return grabbedLeftDancer;
 }
 
-void ChorbDancer::grabLeftDancer() { grabbedDancerToTheLeft = true; }
+void ChorbDancer::grabLeftDancer() { grabbedLeftDancer = true; }
 
-void ChorbDancer::releaseLeftDancer() { grabbedDancerToTheLeft = false; }
+void ChorbDancer::releaseLeftDancer() { grabbedLeftDancer = false; }
 
 void ChorbDancer::setLeftDancer(ChorbDancer* dancer) {
-  dancerToTheLeft = dancer;
+  leftDancer = dancer;
 }
 
-const ChorbDancer* ChorbDancer::getDancerToTheLeft() const {
-  return dancerToTheLeft;
+const ChorbDancer* ChorbDancer::getLeftDancer() const {
+  return leftDancer;
 }
 
-bool ChorbDancer::hasGrabbedDancerToTheRight() const noexcept {
-  return grabbedDancerToTheRight;
+bool ChorbDancer::hasGrabbedRightDancer() const noexcept {
+  return grabbedRightDancer;
 }
 
-void ChorbDancer::grabRightDancer() { grabbedDancerToTheRight = true; }
+void ChorbDancer::grabRightDancer() { grabbedRightDancer = true; }
 
-void ChorbDancer::releaseRightDancer() { grabbedDancerToTheRight = false; }
+void ChorbDancer::releaseRightDancer() { grabbedRightDancer = false; }
 
 void ChorbDancer::setRightDancer(ChorbDancer* dancer) {
-  dancerToTheRight = dancer;
+  rightDancer = dancer;
 }
 
-const ChorbDancer* ChorbDancer::getDancerToTheRight() const {
-  return dancerToTheRight;
+const ChorbDancer* ChorbDancer::getRightDancer() const {
+  return rightDancer;
 }
 
 std::string ChorbDancer::getNickname() const noexcept { return nickname; }

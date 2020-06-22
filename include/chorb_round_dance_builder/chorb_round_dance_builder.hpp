@@ -1,6 +1,7 @@
 #ifndef CHORB_ROUND_DANCE_BUILDER_HPP_220602020
 #define CHORB_ROUND_DANCE_BUILDER_HPP_220602020
 
+#include <memory>
 #include <string>
 
 #include "chorb_dancer.hpp"
@@ -8,6 +9,7 @@
 
 class RoundDanceBuilder {
  public:
+  using UPtr = std::unique_ptr<RoundDanceBuilder>;  // for convenience
   virtual void addDancer(const std::string& nickname) = 0;
   virtual ChorbRoundDance getRoundDance() const = 0;
 };

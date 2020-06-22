@@ -3,12 +3,13 @@
 
 SCENARIO("Test building of round dance is correct") {
   GIVEN("Chorb round dance with 3 dancers") {
-    ChorbRoundDanceBuilder builder;
-    builder.addDancer("dancer1");
-    builder.addDancer("dancer2");
-    builder.addDancer("dancer3");
-    builder.addDancer("dancer4");
-    ChorbRoundDance dance = builder.getRoundDance();
+    RoundDanceBuilder::UPtr builder =
+        std::make_unique<ChorbRoundDanceBuilder>();
+    builder->addDancer("dancer1");
+    builder->addDancer("dancer2");
+    builder->addDancer("dancer3");
+    builder->addDancer("dancer4");
+    ChorbRoundDance dance = builder->getRoundDance();
 
     WHEN("We retrieve all the dancers") {
       std::list<ChorbDancer> dancers = dance.getDancers();
@@ -29,35 +30,35 @@ SCENARIO("Test building of round dance is correct") {
       THEN(
           "All the dancers should have grabbed their left and right partners") {
         auto it = dancers.begin();
-        REQUIRE(it->hasGrabbedDancerToTheLeft());
-        REQUIRE(it->hasGrabbedDancerToTheRight());
+        REQUIRE(it->hasGrabbedLeftDancer());
+        REQUIRE(it->hasGrabbedRightDancer());
         ++it;
-        REQUIRE(it->hasGrabbedDancerToTheLeft());
-        REQUIRE(it->hasGrabbedDancerToTheRight());
+        REQUIRE(it->hasGrabbedLeftDancer());
+        REQUIRE(it->hasGrabbedRightDancer());
         ++it;
-        REQUIRE(it->hasGrabbedDancerToTheLeft());
-        REQUIRE(it->hasGrabbedDancerToTheRight());
+        REQUIRE(it->hasGrabbedLeftDancer());
+        REQUIRE(it->hasGrabbedRightDancer());
         ++it;
-        REQUIRE(it->hasGrabbedDancerToTheLeft());
-        REQUIRE(it->hasGrabbedDancerToTheRight());
+        REQUIRE(it->hasGrabbedLeftDancer());
+        REQUIRE(it->hasGrabbedRightDancer());
       }
 
       THEN("The left and right partners of all dancers should be correct") {
         auto it = dancers.begin();
-        REQUIRE(it->getDancerToTheLeft()->getNickname() == "dancer4");
-        REQUIRE(it->getDancerToTheRight()->getNickname() == "dancer2");
+        REQUIRE(it->getLeftDancer()->getNickname() == "dancer4");
+        REQUIRE(it->getRightDancer()->getNickname() == "dancer2");
 
         ++it;
-        REQUIRE(it->getDancerToTheLeft()->getNickname() == "dancer1");
-        REQUIRE(it->getDancerToTheRight()->getNickname() == "dancer3");
+        REQUIRE(it->getLeftDancer()->getNickname() == "dancer1");
+        REQUIRE(it->getRightDancer()->getNickname() == "dancer3");
 
         ++it;
-        REQUIRE(it->getDancerToTheLeft()->getNickname() == "dancer2");
-        REQUIRE(it->getDancerToTheRight()->getNickname() == "dancer4");
+        REQUIRE(it->getLeftDancer()->getNickname() == "dancer2");
+        REQUIRE(it->getRightDancer()->getNickname() == "dancer4");
 
         ++it;
-        REQUIRE(it->getDancerToTheLeft()->getNickname() == "dancer3");
-        REQUIRE(it->getDancerToTheRight()->getNickname() == "dancer1");
+        REQUIRE(it->getLeftDancer()->getNickname() == "dancer3");
+        REQUIRE(it->getRightDancer()->getNickname() == "dancer1");
       }
     }
   }

@@ -11,26 +11,26 @@ class ChorbDancer {
  private:
   std::string nickname;
 
-  ChorbDancer* dancerToTheLeft{nullptr};
-  bool grabbedDancerToTheLeft{false};
+  ChorbDancer* leftDancer{nullptr};
+  bool grabbedLeftDancer{false};
 
-  ChorbDancer* dancerToTheRight{nullptr};
-  bool grabbedDancerToTheRight{false};
+  ChorbDancer* rightDancer{nullptr};
+  bool grabbedRightDancer{false};
 
  public:
   explicit ChorbDancer(const std::string& nickname);
 
-  bool hasGrabbedDancerToTheLeft() const noexcept;
+  bool hasGrabbedLeftDancer() const noexcept;
   void grabLeftDancer();
   void releaseLeftDancer();
   void setLeftDancer(ChorbDancer* dancer);
-  const ChorbDancer* getDancerToTheLeft() const;
+  const ChorbDancer* getLeftDancer() const;
 
-  bool hasGrabbedDancerToTheRight() const noexcept;
+  bool hasGrabbedRightDancer() const noexcept;
   void grabRightDancer();
   void releaseRightDancer();
   void setRightDancer(ChorbDancer* dancer);
-  const ChorbDancer* getDancerToTheRight() const;
+  const ChorbDancer* getRightDancer() const;
 
   std::string getNickname() const noexcept;
 };
