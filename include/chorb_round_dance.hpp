@@ -24,8 +24,9 @@ class ChorbRoundDance {
 
  public:
   // TODO DV add doc
-  bool addDancer(const std::string& newDancer, const std::string& leftDancer,
-                 const std::string& rightDancer);
+  bool addDancer(const std::string& newDancerNickname,
+                 const std::string& leftDancerNickname,
+                 const std::string& rightDancerNickname);
 
   // TODO DV add doc
   bool removeDancer(const std::string& dancer);
@@ -50,6 +51,14 @@ class ChorbRoundDance {
   std::optional<ChorbDancer> getDancer(const std::string& dancer) const;
 
   const std::list<ChorbDancer>& getDancers() const;
+
+ private:
+  bool areNeighbours(const std::string& dancer1,
+                     const std::string& dancer2) noexcept;
+
+  // TODO DV doc
+  // Returns iterator to dancer
+  std::list<ChorbDancer>::iterator locateDancer(const std::string& nickname);
 };
 
 #endif
