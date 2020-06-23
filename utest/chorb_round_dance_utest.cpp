@@ -79,7 +79,7 @@ SCENARIO("Adding dancer to built round dance is correct") {
     ChorbRoundDance* dance = createTestChorbRoundDance(4);
 
     WHEN("We add a new dancer between the first and the second dancers") {
-      dance->addDancer("dancer1.5", "dancer1", "dancer2");
+      REQUIRE(dance->addDancer("dancer1.5", "dancer1", "dancer2") == true);
 
       THEN("The dancers should have correct nicknames") {
         auto it = dance->getDancers().begin();
