@@ -1,21 +1,31 @@
+#include <string>
+#include <vector>
+
 #include "catch.hpp"
 #include "chorb_round_dance_builder/chorb_round_dance_builder.hpp"
 #include "chorb_round_dance_builder/chorb_round_dance_director.hpp"
 
+// TODO DV doc
 // The below function is also a demo of the builder pattern
-ChorbRoundDance* createTestChorbRoundDance() {
+// Example: If numberOfDancers is 3, the constructed dance will have dancers
+// with names "dancer1", "dancer2" and "dancer3"
+ChorbRoundDance* createTestChorbRoundDance(int numberOfDancers) {
   StandartChorbRoundDanceBuilder builder;
   ChorbRoundDanceDirector director;
   director.setBuilder(&builder);
-  std::vector<std::string> nicknames{"dancer1", "dancer2", "dancer3",
-                                     "dancer4"};
+
+  std::vector<std::string> nicknames;
+  for (int i = 1; i <= numberOfDancers; i++) {
+    nicknames.push_back("dancer" + std::to_string(i));
+  }
+
   ChorbRoundDance* dance = director.createChorbRoundDance(nicknames);
   return dance;
 }
 
 SCENARIO("Test building of round dance is correct") {
-  GIVEN("Chorb round dance with 3 dancers") {
-    ChorbRoundDance* dance = createTestChorbRoundDance();
+  GIVEN("A round dance with 4 dancers") {
+    ChorbRoundDance* dance = createTestChorbRoundDance(4);
 
     WHEN("We retrieve all the dancers") {
       std::list<ChorbDancer> dancers = dance->getDancers();
@@ -66,7 +76,7 @@ SCENARIO("Test building of round dance is correct") {
 
 SCENARIO("Adding dancer to built round dance is correct") {
   GIVEN("A round dance with 4 dancers") {
-    ChorbRoundDance* dance = createTestChorbRoundDance();
+    ChorbRoundDance* dance = createTestChorbRoundDance(4);
 
     WHEN("We add a new dancer between the first and the second dancers") {
       dance->addDancer("dancer1.5", "dancer1", "dancer2");
