@@ -8,7 +8,8 @@ add_executable(chorb_round_dance
   main.cpp
   src/chorb_dancer.cpp
   src/chorb_round_dance.cpp
-  src/chorb_round_dance_builder/chorb_round_dance_builder.cpp)
+  src/chorb_round_dance_builder/chorb_round_dance_builder.cpp
+  src/chorb_round_dance_builder/chorb_round_dance_director.cpp)
 
 set_property(TARGET chorb_round_dance PROPERTY CXX_STANDARD 20)
 

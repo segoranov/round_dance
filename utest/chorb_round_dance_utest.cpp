@@ -1,14 +1,15 @@
 #include "catch.hpp"
 #include "chorb_round_dance_builder/chorb_round_dance_builder.hpp"
+#include "chorb_round_dance_builder/chorb_round_dance_director.hpp"
 
 SCENARIO("Test building of round dance is correct") {
   GIVEN("Chorb round dance with 3 dancers") {
     StandartChorbRoundDanceBuilder builder;
-    builder.addDancer("dancer1");
-    builder.addDancer("dancer2");
-    builder.addDancer("dancer3");
-    builder.addDancer("dancer4");
-    ChorbRoundDance* dance = builder.getRoundDance();
+    ChorbRoundDanceDirector director;
+    director.setBuilder(&builder);
+    std::vector<std::string> nicknames{"dancer1", "dancer2", "dancer3",
+                                       "dancer4"};
+    ChorbRoundDance* dance = director.createChorbRoundDance(nicknames);
 
     WHEN("We retrieve all the dancers") {
       std::list<ChorbDancer> dancers = dance->getDancers();
@@ -52,17 +53,19 @@ SCENARIO("Test building of round dance is correct") {
         REQUIRE(it->getRightDancer()->getNickname() == "dancer1");
       }
     }
+
+    delete dance;
   }
 }
 
 SCENARIO("Adding dancer to built round dance is correct") {
   GIVEN("A round dance with 4 dancers") {
     StandartChorbRoundDanceBuilder builder;
-    builder.addDancer("dancer1");
-    builder.addDancer("dancer2");
-    builder.addDancer("dancer3");
-    builder.addDancer("dancer4");
-    ChorbRoundDance* dance = builder.getRoundDance();
+    ChorbRoundDanceDirector director;
+    director.setBuilder(&builder);
+    std::vector<std::string> nicknames{"dancer1", "dancer2", "dancer3",
+                                       "dancer4"};
+    ChorbRoundDance* dance = director.createChorbRoundDance(nicknames);
 
     WHEN("We add a new dancer between the first and the second dancers") {
       dance->addDancer("dancer1.5", "dancer1", "dancer2");
@@ -122,5 +125,7 @@ SCENARIO("Adding dancer to built round dance is correct") {
                 false);
       }
     }
+
+    delete dance;
   }
 }
