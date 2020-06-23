@@ -3,16 +3,15 @@
 
 SCENARIO("Test building of round dance is correct") {
   GIVEN("Chorb round dance with 3 dancers") {
-    RoundDanceBuilder::UPtr builder =
-        std::make_unique<ChorbRoundDanceBuilder>();
-    builder->addDancer("dancer1");
-    builder->addDancer("dancer2");
-    builder->addDancer("dancer3");
-    builder->addDancer("dancer4");
-    ChorbRoundDance dance = builder->getRoundDance();
+    StandartChorbRoundDanceBuilder builder;
+    builder.addDancer("dancer1");
+    builder.addDancer("dancer2");
+    builder.addDancer("dancer3");
+    builder.addDancer("dancer4");
+    ChorbRoundDance* dance = builder.getRoundDance();
 
     WHEN("We retrieve all the dancers") {
-      std::list<ChorbDancer> dancers = dance.getDancers();
+      std::list<ChorbDancer> dancers = dance->getDancers();
 
       THEN("The dancers should have correct nicknames") {
         auto it = dancers.begin();
@@ -58,19 +57,18 @@ SCENARIO("Test building of round dance is correct") {
 
 SCENARIO("Adding dancer to built round dance is correct") {
   GIVEN("A round dance with 4 dancers") {
-    RoundDanceBuilder::UPtr builder =
-        std::make_unique<ChorbRoundDanceBuilder>();
-    builder->addDancer("dancer1");
-    builder->addDancer("dancer2");
-    builder->addDancer("dancer3");
-    builder->addDancer("dancer4");
-    ChorbRoundDance dance = builder->getRoundDance();
+    StandartChorbRoundDanceBuilder builder;
+    builder.addDancer("dancer1");
+    builder.addDancer("dancer2");
+    builder.addDancer("dancer3");
+    builder.addDancer("dancer4");
+    ChorbRoundDance* dance = builder.getRoundDance();
 
     WHEN("We add a new dancer between the first and the second dancers") {
-      dance.addDancer("dancer1.5", "dancer1", "dancer2");
+      dance->addDancer("dancer1.5", "dancer1", "dancer2");
 
       THEN("The dancers should have correct nicknames") {
-        auto it = dance.getDancers().begin();
+        auto it = dance->getDancers().begin();
         REQUIRE(it->getNickname() == "dancer1");
         ++it;
         REQUIRE(it->getNickname() == "dancer1.5");
@@ -81,12 +79,12 @@ SCENARIO("Adding dancer to built round dance is correct") {
         ++it;
         REQUIRE(it->getNickname() == "dancer4");
         ++it;
-        REQUIRE(it == dance.getDancers().end());
+        REQUIRE(it == dance->getDancers().end());
       }
 
       THEN("The left and right partners of all dancers should be correct") {
         // We should have: d1 d1.5 d2 d3 d4
-        auto it = dance.getDancers().begin();
+        auto it = dance->getDancers().begin();
         REQUIRE(it->getLeftDancer()->getNickname() == "dancer4");
         REQUIRE(it->getRightDancer()->getNickname() == "dancer1.5");
 
@@ -109,7 +107,7 @@ SCENARIO("Adding dancer to built round dance is correct") {
 
       THEN(
           "All the dancers should have grabbed their left and right partners") {
-        for (const auto& dancer : dance.getDancers()) {
+        for (const auto& dancer : dance->getDancers()) {
           REQUIRE(dancer.hasGrabbedLeftDancer());
           REQUIRE(dancer.hasGrabbedRightDancer());
         }
@@ -120,7 +118,7 @@ SCENARIO("Adding dancer to built round dance is correct") {
       THEN(
           "The operation should fail because the second and fourth dancers are "
           "not neighbors") {
-        REQUIRE(dance.addDancer("SOME_DANCER_NAME", "dancer2", "dancer4") ==
+        REQUIRE(dance->addDancer("SOME_DANCER_NAME", "dancer2", "dancer4") ==
                 false);
       }
     }

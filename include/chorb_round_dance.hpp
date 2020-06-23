@@ -14,9 +14,7 @@ class ChorbDancer;
 enum class Direction { LEFT, RIGHT, BOTH };
 
 class ChorbRoundDance {
-  // TODO Is this 'friend' ok? I want the builder
-  // to have access to the list of dancers.
-  friend class ChorbRoundDanceBuilder;
+  friend class StandartChorbRoundDanceBuilder;
 
  private:
   std::list<ChorbDancer> dancers;

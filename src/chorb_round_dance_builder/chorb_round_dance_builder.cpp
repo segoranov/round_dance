@@ -1,16 +1,24 @@
 #include "chorb_round_dance_builder/chorb_round_dance_builder.hpp"
 
-void ChorbRoundDanceBuilder::addDancer(const std::string& nickname) {
-  dance.dancers.push_back(ChorbDancer{nickname});
-  ChorbDancer& newDancer = dance.dancers.back();
+void ChorbRoundDanceBuilder::addDancer(const std::string& nickname) {}
 
-  if (dance.dancers.size() == 1) {
+ChorbRoundDance* ChorbRoundDanceBuilder::getRoundDance() { return nullptr; }
+
+StandartChorbRoundDanceBuilder::StandartChorbRoundDanceBuilder() {
+  dancePtr = new ChorbRoundDance;
+}
+
+void StandartChorbRoundDanceBuilder::addDancer(const std::string& nickname) {
+  dancePtr->dancers.push_back(ChorbDancer{nickname});
+  ChorbDancer& newDancer = dancePtr->dancers.back();
+
+  if (dancePtr->dancers.size() == 1) {
     return;  // Nothing more to do
   }
 
-  if (dance.dancers.size() == 2) {
+  if (dancePtr->dancers.size() == 2) {
     // firstDancer <---> newDancer
-    ChorbDancer& firstDancer = dance.dancers.front();
+    ChorbDancer& firstDancer = dancePtr->dancers.front();
     firstDancer.setRightDancer(&newDancer);
     firstDancer.grabRightDancer();
 
@@ -28,7 +36,7 @@ void ChorbRoundDanceBuilder::addDancer(const std::string& nickname) {
   // clang-format on
 
   // The first dancer grabs the new dancer to the left
-  ChorbDancer& firstDancer = dance.dancers.front();
+  ChorbDancer& firstDancer = dancePtr->dancers.front();
   firstDancer.setLeftDancer(&newDancer);
   firstDancer.grabLeftDancer();
 
@@ -37,7 +45,7 @@ void ChorbRoundDanceBuilder::addDancer(const std::string& nickname) {
   newDancer.grabRightDancer();
 
   // The previous last dancer grabs the new dancer to the right
-  ChorbDancer& previousLastDancer = *--(--dance.dancers.end());
+  ChorbDancer& previousLastDancer = *--(--dancePtr->dancers.end());
   previousLastDancer.setRightDancer(&newDancer);
   previousLastDancer.grabRightDancer();
 
@@ -46,4 +54,6 @@ void ChorbRoundDanceBuilder::addDancer(const std::string& nickname) {
   newDancer.grabLeftDancer();
 }
 
-ChorbRoundDance ChorbRoundDanceBuilder::getRoundDance() const { return dance; }
+ChorbRoundDance* StandartChorbRoundDanceBuilder::getRoundDance() {
+  return dancePtr;  // TODO should we give up ownership here?
+}
