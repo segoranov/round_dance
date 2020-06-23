@@ -1,75 +1,75 @@
 @startuml
 package Model {
 
-class ChorbRoundDance{
-+ addDancer(newDancer: string, leftDancer : string, rightDancer : string): bool
-+ removeDancer(dancer: string): bool
-+ swapDancers(leftDancer: string, rightDancer : string): void
-}
+  class ChorbRoundDance{
+    + addDancer(newDancer: string, leftDancer : string, rightDancer : string): bool
+    + removeDancer(dancer: string): bool
+    + swapDancers(leftDancer: string, rightDancer : string): void
+  }
 
-class ChorbDancer{
+  class ChorbDancer{
 
-}
+  }
 
-package Builder {
+  package Builder {
 
-class ChorbRoundDanceBuilder {
-  + addDancer(nickname: string) : void
-  + getRoundDance(): ChorbRoundDance*
-}
+    class ChorbRoundDanceBuilder {
+      + addDancer(nickname: string) : void
+      + getRoundDance(): ChorbRoundDance*
+    }
 
-class StandartChorbRoundDanceBuilder implements ChorbRoundDanceBuilder {
-  - dancePtr : ChorbRoundDance*
-  + addDancer(nickname: string) : void
-  + getRoundDance(): ChorbRoundDance*
-}
+    class StandartChorbRoundDanceBuilder implements ChorbRoundDanceBuilder {
+      - dancePtr : ChorbRoundDance*
+      + addDancer(nickname: string) : void
+      + getRoundDance(): ChorbRoundDance*
+    }
 
-class ChorbRoundDanceDirector {
-  + setBuilder(ChorbRoundDanceBuilder* theBuilder): void
-  + createChorbRoundDance(vector<string> nicknames): ChorbRoundDance*
-}
+    class ChorbRoundDanceDirector {
+      + setBuilder(ChorbRoundDanceBuilder* theBuilder): void
+      + createChorbRoundDance(vector<string> nicknames): ChorbRoundDance*
+    }
 
-ChorbRoundDanceDirector --> "1" ChorbRoundDanceBuilder
+    ChorbRoundDanceDirector --> "1" ChorbRoundDanceBuilder
 
-}
+  }
 
 }
 
 package View {
 
-interface RoundDanceView {
-+ showRoundDance(): void
-+ showInfoAboutDancer(dancerInfo: string): void
-+ showError(errorMessage: string): void
-}
+  interface RoundDanceView {
+    + showRoundDance(): void
+    + showInfoAboutDancer(dancerInfo: string): void
+    + showError(errorMessage: string): void
+  }
 
-class ConsoleRoundDanceView implements RoundDanceView {
-+ showRoundDance(RoundDance): void
-+ showInfoAboutDancer(Dancer): void
-+ showError(errorMessage: string): void
-}
+  class ConsoleRoundDanceView implements RoundDanceView {
+    + showRoundDance(RoundDance): void
+    + showInfoAboutDancer(Dancer): void
+    + showError(errorMessage: string): void
+  }
 
-class MockView implements RoundDanceView {
-+ showRoundDance(RoundDance): void
-+ showInfoAboutDancer(Dancer): void
-+ showError(errorMessage: string): void
-}
+  class MockView implements RoundDanceView {
+    + showRoundDance(RoundDance): void
+    + showInfoAboutDancer(Dancer): void
+    + showError(errorMessage: string): void
+  }
 
-note top of MockView: Facilitates unit testing
+  note top of MockView: Facilitates unit testing
 
 }
 
 package Presenter {
-class RoundDancePresenter {
-+ onAddDancer(Dancer)
-+ onRemoveDancer(Dancer)
-+ onSwapDancers(Dancer, Dancer)
-+ onGrab(who, <left|right|both>)
-+ onRelease(who, <left|right|both>)
-+ onGetDancerInfo(Dancer)
-+ onShowRoundDance()
-+ onExit()
-}
+  class RoundDancePresenter {
+    + onAddDancer(Dancer)
+    + onRemoveDancer(Dancer)
+    + onSwapDancers(Dancer, Dancer)
+    + onGrab(who, <left|right|both>)
+    + onRelease(who, <left|right|both>)
+    + onGetDancerInfo(Dancer)
+    + onShowRoundDance()
+    + onExit()
+  }
 
 }
 @enduml
