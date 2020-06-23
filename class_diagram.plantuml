@@ -1,13 +1,13 @@
 @startuml
 package Model {
 
-class RoundDance{
-+ addDancer(dancer : string) : void
-+ removeDancer(dancer : string) : void
+class ChorbRoundDance{
++ addDancer(newDancer : string, leftDancer : string, rightDancer : string) : bool
++ removeDancer(dancer : string) : bool
 + swapDancers(leftDancer : string, rightDancer : string) : void 
 }
 
-class RoundDancer{
+class ChorbDancer{
 
 }
 
@@ -32,6 +32,7 @@ class MockView implements RoundDanceView {
 + showInfoAboutDancer(Dancer) : void
 + showError(errorMessage: string) : void
 }
+
 note top of MockView: Facilitates unit testing
 
 }
