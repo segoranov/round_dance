@@ -64,15 +64,19 @@ bool ChorbRoundDance::addDancer(const std::string& newDancerNickname,
 bool ChorbRoundDance::areNeighbours(const std::string& dancer1,
                                     const std::string& dancer2) noexcept {
   auto itDancer1 = locateDancer(dancer1);
-  auto itDancer2 = locateDancer(dancer1);
+  auto itDancer2 = locateDancer(dancer2);
 
-  return (itDancer1->getRightDancer() == &(*itDancer2) &&
-          itDancer2->getLeftDancer() == &(*itDancer1))
+  // true if dancer1 is to the left of dancer2
+  const bool orderDancer1Dancer2 =
+      itDancer1->getRightDancer()->getNickname() == itDancer2->getNickname() &&
+      itDancer2->getLeftDancer()->getNickname() == itDancer1->getNickname();
 
-         ||
+  // true if dancer1 is to the right of dancer2
+  const bool orderDancer2Dancer1 =
+      itDancer1->getLeftDancer()->getNickname() == itDancer2->getNickname() &&
+      itDancer2->getRightDancer()->getNickname() == itDancer1->getNickname();
 
-         (itDancer1->getLeftDancer() == &(*itDancer2) &&
-          itDancer2->getRightDancer() == &(*itDancer1));
+  return orderDancer1Dancer2 || orderDancer2Dancer1;
 }
 
 std::list<ChorbDancer>::iterator ChorbRoundDance::locateDancer(
