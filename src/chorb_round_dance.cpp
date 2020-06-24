@@ -21,6 +21,8 @@ std::vector<ChorbDancer> ChorbRoundDance::getDancers() const {
 bool ChorbRoundDance::addDancer(const std::string& newDancerNickname,
                                 const std::string& dancer1Nickname,
                                 const std::string& dancer2Nickname) {
+  // Below implementation is O(1)
+
   // We should have at least 3 dancers so that the round dance can take place!
   assert(mapNicknameToDancer.size() >= 3);
 
