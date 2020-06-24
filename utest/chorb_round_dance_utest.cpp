@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -11,6 +12,7 @@
 // Example: If numberOfDancers is 3, the constructed dance will have dancers
 // with names "dancer1", "dancer2" and "dancer3"
 ChorbRoundDance* createTestChorbRoundDance(int numberOfDancers) {
+  assert(numberOfDancers >= 3);
   StandartChorbRoundDanceBuilder builder;
   ChorbRoundDanceDirector director;
   director.setBuilder(&builder);
@@ -31,6 +33,10 @@ SCENARIO("Test building of round dance is correct") {
     WHEN("We retrieve all the dancers") {
       std::vector<ChorbDancer> dancers = dance->getDancers();
 
+      // TODO!!! extract the below check for order and nicknames in a function
+      // It is currently used 3 times and there is a lot code duplication
+      // Also, what if we want to create a test with 10000 dancers?
+      // This function will be needed!
       THEN(
           "The dancers should have correct nicknames and be in correct order") {
         // We should have: d1 d2 d3 d4
@@ -177,6 +183,79 @@ SCENARIO("Adding dancer to built round dance is correct") {
           REQUIRE(dancer.hasGrabbedLeftDancer());
           REQUIRE(dancer.hasGrabbedRightDancer());
         }
+      }
+    }
+
+    delete dance;
+  }
+
+  GIVEN("A round dance with 3 dancers") {
+    ChorbRoundDance* dance = createTestChorbRoundDance(3);
+    WHEN("We add 3 new dancers") {
+      // We have d1 d2 d3
+      REQUIRE(dance->addDancer("dancer1.5", "dancer1", "dancer2") == true);
+      REQUIRE(dance->addDancer("SHOULD_NOT_BE_ADDED", "dancer1", "dancer2") ==
+              false);
+      REQUIRE(dance->addDancer("SHOULD_NOT_BE_ADDED", "dancer2", "dancer1") ==
+              false);
+
+      // Now we have d1 d1.5 d2 d3
+      REQUIRE(dance->addDancer("dancer3.5", "dancer1", "dancer3") == true);
+      REQUIRE(dance->addDancer("SHOULD_NOT_BE_ADDED", "dancer1", "dancer3") ==
+              false);
+      REQUIRE(dance->addDancer("SHOULD_NOT_BE_ADDED", "dancer3", "dancer1") ==
+              false);
+
+      // Now we have d1 d1.5 d2 d3 d3.5
+      REQUIRE(dance->addDancer("dancer2.5", "dancer3", "dancer2") == true);
+      REQUIRE(dance->addDancer("SHOULD_NOT_BE_ADDED", "dancer3", "dancer2") ==
+              false);
+      REQUIRE(dance->addDancer("SHOULD_NOT_BE_ADDED", "dancer2", "dancer3") ==
+              false);
+
+      // Now we have d1 d1.5 d2 d2.5 d3 d3.5
+      REQUIRE(dance->addDancer("SHOULD_NOT_BE_ADDED", "dancer1", "dancer3") ==
+              false);
+      REQUIRE(dance->addDancer("SHOULD_NOT_BE_ADDED", "dancer1.5", "dancer3") ==
+              false);
+
+      THEN(
+          "The dancers should have correct nicknames and be in correct order") {
+        // We should have d1 d1.5 d2 d2.5 d3 d3.5
+        auto dancers = dance->getDancers();
+        auto it = dancers.begin();
+        REQUIRE(it->getNickname() == "dancer1");
+        REQUIRE(it->getLeftDancer()->getNickname() == "dancer3.5");
+        REQUIRE(it->getRightDancer()->getNickname() == "dancer1.5");
+
+        ++it;
+        REQUIRE(it->getNickname() == "dancer1.5");
+        REQUIRE(it->getLeftDancer()->getNickname() == "dancer1");
+        REQUIRE(it->getRightDancer()->getNickname() == "dancer2");
+
+        ++it;
+        REQUIRE(it->getNickname() == "dancer2");
+        REQUIRE(it->getLeftDancer()->getNickname() == "dancer1.5");
+        REQUIRE(it->getRightDancer()->getNickname() == "dancer2.5");
+
+        ++it;
+        REQUIRE(it->getNickname() == "dancer2.5");
+        REQUIRE(it->getLeftDancer()->getNickname() == "dancer2");
+        REQUIRE(it->getRightDancer()->getNickname() == "dancer3");
+
+        ++it;
+
+        REQUIRE(it->getNickname() == "dancer3");
+        REQUIRE(it->getLeftDancer()->getNickname() == "dancer2.5");
+        REQUIRE(it->getRightDancer()->getNickname() == "dancer3.5");
+
+        ++it;
+        REQUIRE(it->getNickname() == "dancer3.5");
+        REQUIRE(it->getLeftDancer()->getNickname() == "dancer3");
+        REQUIRE(it->getRightDancer()->getNickname() == "dancer1");
+
+        ++it;
+        REQUIRE(it == dancers.end());
       }
     }
 
