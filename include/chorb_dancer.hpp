@@ -18,6 +18,7 @@ class ChorbDancer {
   bool grabbedRightDancer{false};
 
  public:
+  ChorbDancer() = default;
   explicit ChorbDancer(const std::string& nickname);
 
   bool hasGrabbedLeftDancer() const noexcept;

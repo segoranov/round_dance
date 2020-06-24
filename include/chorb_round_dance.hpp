@@ -1,11 +1,11 @@
 #ifndef CHORB_ROUND_DANCE_HPP_22062020
 #define CHORB_ROUND_DANCE_HPP_22062020
 
-#include <list>
 #include <optional>
 #include <unordered_map>
+#include <vector>
 
-class ChorbDancer;
+#include "chorb_dancer.hpp"
 
 // The direction in which a dancer grabs/releases another dancer.
 // For example a dancer can grab the dancer to the left, or to the right, or
@@ -17,8 +17,10 @@ class ChorbRoundDance {
   friend class StandartChorbRoundDanceBuilder;
 
  private:
-  std::list<ChorbDancer> dancers;
-  std::unordered_map<std::string, ChorbDancer*> mapNicknameToDancer;
+  std::unordered_map<std::string, ChorbDancer> mapNicknameToDancer;
+
+  ChorbDancer* firstDancer;
+  ChorbDancer* lastDancer;
 
  public:
   // TODO DV add doc
@@ -48,15 +50,17 @@ class ChorbRoundDance {
    */
   std::optional<ChorbDancer> getDancer(const std::string& dancer) const;
 
-  const std::list<ChorbDancer>& getDancers() const;
+  // Returns them in the order in which they are grabbed
+  // TODO DV format doc
+  std::vector<ChorbDancer> getDancers() const;
 
  private:
   bool areNeighbours(const std::string& dancer1,
                      const std::string& dancer2) noexcept;
 
   // TODO DV doc
-  // Returns iterator to dancer
-  std::list<ChorbDancer>::iterator locateDancer(const std::string& nickname);
+  // Checks whether the dancer exists and if not, throws exception
+  void checkDancerExists(const std::string& nickname);
 };
 
 #endif

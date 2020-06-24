@@ -9,21 +9,26 @@ StandartChorbRoundDanceBuilder::StandartChorbRoundDanceBuilder() {
 }
 
 void StandartChorbRoundDanceBuilder::addDancer(const std::string& nickname) {
-  dancePtr->dancers.push_back(ChorbDancer{nickname});
-  ChorbDancer& newDancer = dancePtr->dancers.back();
+  // TODO Check no more than 30 symbols nickname
+  // TODO Create hierarchy of exceptions to throw if more than 30
 
-  if (dancePtr->dancers.size() == 1) {
-    return;  // Nothing more to do
+  dancePtr->mapNicknameToDancer.insert({nickname, ChorbDancer{nickname}});
+  ChorbDancer* newDancer = &(dancePtr->mapNicknameToDancer[nickname]);
+
+  if (dancePtr->mapNicknameToDancer.size() == 1) {
+    dancePtr->firstDancer = dancePtr->lastDancer = newDancer;
+    return;
   }
 
-  if (dancePtr->dancers.size() == 2) {
+  if (dancePtr->mapNicknameToDancer.size() == 2) {
     // firstDancer <---> newDancer
-    ChorbDancer& firstDancer = dancePtr->dancers.front();
-    firstDancer.setRightDancer(&newDancer);
-    firstDancer.grabRightDancer();
+    dancePtr->firstDancer->setRightDancer(newDancer);
+    dancePtr->firstDancer->grabRightDancer();
 
-    newDancer.setLeftDancer(&firstDancer);
-    newDancer.grabLeftDancer();
+    newDancer->setLeftDancer(dancePtr->firstDancer);
+    newDancer->grabLeftDancer();
+
+    dancePtr->lastDancer = newDancer;
 
     return;
   }
@@ -36,22 +41,23 @@ void StandartChorbRoundDanceBuilder::addDancer(const std::string& nickname) {
   // clang-format on
 
   // The first dancer grabs the new dancer to the left
-  ChorbDancer& firstDancer = dancePtr->dancers.front();
-  firstDancer.setLeftDancer(&newDancer);
-  firstDancer.grabLeftDancer();
+  dancePtr->firstDancer->setLeftDancer(newDancer);
+  dancePtr->firstDancer->grabLeftDancer();
 
   // The new dancer grabs the first dancer to the right
-  newDancer.setRightDancer(&firstDancer);
-  newDancer.grabRightDancer();
+  newDancer->setRightDancer(dancePtr->firstDancer);
+  newDancer->grabRightDancer();
 
   // The previous last dancer grabs the new dancer to the right
-  ChorbDancer& previousLastDancer = *--(--dancePtr->dancers.end());
-  previousLastDancer.setRightDancer(&newDancer);
-  previousLastDancer.grabRightDancer();
+  dancePtr->lastDancer->setRightDancer(newDancer);
+  dancePtr->lastDancer->grabRightDancer();
 
   // The new dancer grabs the previous last dancer to the left
-  newDancer.setLeftDancer(&previousLastDancer);
-  newDancer.grabLeftDancer();
+  newDancer->setLeftDancer(dancePtr->lastDancer);
+  newDancer->grabLeftDancer();
+
+  // The new dancer becomes the last dancer
+  dancePtr->lastDancer = newDancer;
 }
 
 ChorbRoundDance* StandartChorbRoundDanceBuilder::getRoundDance() {

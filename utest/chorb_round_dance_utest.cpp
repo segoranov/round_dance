@@ -1,3 +1,4 @@
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -28,7 +29,7 @@ SCENARIO("Test building of round dance is correct") {
     ChorbRoundDance* dance = createTestChorbRoundDance(4);
 
     WHEN("We retrieve all the dancers") {
-      std::list<ChorbDancer> dancers = dance->getDancers();
+      std::vector<ChorbDancer> dancers = dance->getDancers();
 
       THEN("The dancers should have correct nicknames") {
         auto it = dancers.begin();
@@ -82,7 +83,8 @@ SCENARIO("Adding dancer to built round dance is correct") {
       REQUIRE(dance->addDancer("dancer1.5", "dancer1", "dancer2") == true);
 
       THEN("The dancers should have correct nicknames") {
-        auto it = dance->getDancers().begin();
+        auto dancers = dance->getDancers();
+        auto it = dancers.begin();
         REQUIRE(it->getNickname() == "dancer1");
         ++it;
         REQUIRE(it->getNickname() == "dancer1.5");
@@ -93,12 +95,13 @@ SCENARIO("Adding dancer to built round dance is correct") {
         ++it;
         REQUIRE(it->getNickname() == "dancer4");
         ++it;
-        REQUIRE(it == dance->getDancers().end());
+        REQUIRE(it == dancers.end());
       }
 
       THEN("The left and right partners of all dancers should be correct") {
         // We should have: d1 d1.5 d2 d3 d4
-        auto it = dance->getDancers().begin();
+        auto dancers = dance->getDancers();
+        auto it = dancers.begin();
         REQUIRE(it->getLeftDancer()->getNickname() == "dancer4");
         REQUIRE(it->getRightDancer()->getNickname() == "dancer1.5");
 
@@ -121,7 +124,8 @@ SCENARIO("Adding dancer to built round dance is correct") {
 
       THEN(
           "All the dancers should have grabbed their left and right partners") {
-        for (const auto& dancer : dance->getDancers()) {
+        auto dancers = dance->getDancers();
+        for (const auto& dancer : dancers) {
           REQUIRE(dancer.hasGrabbedLeftDancer());
           REQUIRE(dancer.hasGrabbedRightDancer());
         }
