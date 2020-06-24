@@ -8,8 +8,8 @@
 #include "chorb_dancer.hpp"
 
 // The direction in which a dancer grabs/releases another dancer.
-// For example a dancer can grab the dancer to the left, or to the right, or
-// both.
+// For example a dancer can grab the dancer to the left, the dancer to the
+// right, or both.
 // TODO DV format/improve doc.
 enum class Direction { LEFT, RIGHT, BOTH };
 

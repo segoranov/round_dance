@@ -2,13 +2,56 @@
 package Model {
 
   class ChorbRoundDance{
+    - hashMap: nickname -> ChorbDancer
+    - firstDancer: ChorbDancer*
+    - lastDancer: ChorbDancer*
     + addDancer(newDancer: string, leftDancer : string, rightDancer : string): bool
     + removeDancer(dancer: string): bool
     + swapDancers(leftDancer: string, rightDancer : string): void
+    + grab(dancer: string, grabbingDircetion: Direction)
+    + release(dancer: string, releaseDirection: Direction)
+    + getDancer(dancer: nickname): ChorbDancer
+    + getDancers(): vector<ChorbDancer>
   }
 
-  class ChorbDancer{
+  ChorbRoundDance --> "3" ChorbDancer
 
+  note top of ChorbRoundDance
+  The hashmap helps making the add/remove/swap dancer operations O(1)
+  The dancers themselves make something like doubly-linked-list.
+  end note
+
+  enum Direction {
+    LEFT, RIGHT, BOTH
+  }
+
+  note top of Direction
+    The direction in which a dancer
+    grabs/releases another dancer.
+    For example a dancer can grab the dancer
+    to the left, the dancer to the right, or both.
+  end note
+
+  class ChorbDancer{
+    - nickname: string
+
+    - leftDancer: ChorbDancer*
+    - grabbedLeftDancer: bool {read, write}
+
+    - rightDancer: ChorbDancer*
+    - grabbedRightDancer: bool {read, write}
+
+    + ChorbDancer(nickname: string)
+
+    + grabLeftDancer(): void
+    + releaseLeftDancer(): void
+    + setLeftDancer(dancer: ChorbDancer* ): void
+    + getLeftDancer(): ChorbDancer*
+
+    + grabRightDancer(): void
+    + releaseRightDancer(): void
+    + setRightDancer(dancer: ChorbDancer* ): void
+    + getRightDancer(): ChorbDancer*
   }
 
   package Builder {
