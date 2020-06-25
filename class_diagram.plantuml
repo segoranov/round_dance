@@ -54,6 +54,16 @@ package Model {
     + getRightDancer(): ChorbDancer*
   }
 
+  class NicknameGenerator {
+    + fromStream(is: iostream): vector<string> {static}
+  }
+
+  note top of NicknameGenerator
+  Responsible for the generation of vector of strings (nicknames)
+  for the Builder from some kind of input, for example
+  file, DB, user input, etc...
+  end note
+
   package Builder {
 
     class ChorbRoundDanceBuilder {
