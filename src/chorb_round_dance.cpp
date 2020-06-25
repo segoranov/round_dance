@@ -35,7 +35,6 @@ bool ChorbRoundDance::addDancer(const std::string& newDancerNickname,
   checkDancerExists(dancer2Nickname);
 
   if (!areNeighbours(dancer1Nickname, dancer2Nickname)) {
-    // TODO print error message (View?)
     return false;
   }
 
