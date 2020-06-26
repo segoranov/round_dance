@@ -120,3 +120,12 @@ void ChorbRoundDance::checkDancerExists(const std::string& nickname) {
     // TODO SG/DV create hierarchy of exceptions instead
   }
 }
+
+std::optional<ChorbDancer> ChorbRoundDance::getDancer(
+    const std::string& dancer) {
+  if (!mapNicknameToDancer.contains(dancer)) {
+    return std::nullopt;
+  } else {
+    return mapNicknameToDancer[dancer];  // implicitly constructs optional
+  }
+}

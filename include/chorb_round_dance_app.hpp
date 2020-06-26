@@ -29,6 +29,7 @@ class ChorbRoundDanceApp {
   COMMAND strToCommand(const std::string& command);
 
   void onAddCommand(const std::vector<std::string>& tokens);
+  void onInfoCommand(const std::vector<std::string>& tokens);
 
  public:
   ChorbRoundDanceApp(const std::string& file);

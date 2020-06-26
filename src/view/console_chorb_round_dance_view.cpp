@@ -2,13 +2,49 @@
 
 #include <iostream>
 
+#include "model/chorb_dancer.hpp"
+#include "model/chorb_round_dance.hpp"
+
 void ConsoleChorbRoundDanceView::showRoundDance(const ChorbRoundDance& dance) {
-  // TODO
+  std::cout << "THE CURRENT CHORB ROUND DANCE:\n";
+  for (const auto& dancer : dance.getDancers()) {
+    std::cout << dancer.getNickname() << '\n';
+  }
+  std::cout << '\n';
 }
 
 void ConsoleChorbRoundDanceView::showInfoAboutDancer(
     const ChorbDancer& dancer) {
-  // TODO
+  std::string info;
+  info += dancer.getLeftDancer()->getNickname();
+
+  if (dancer.hasGrabbedLeftDancer()) {
+    info += " <--";
+  }
+
+  if (dancer.getLeftDancer()->hasGrabbedRightDancer()) {
+    info += "> ";
+  } else {
+    info += "- ";
+  }
+
+  info += dancer.getNickname();
+
+  if(dancer.getRightDancer()->hasGrabbedLeftDancer()) {
+    info += " <";
+  } else {
+    info += " -";
+  }
+
+  if (dancer.hasGrabbedRightDancer()) {
+    info += "--> ";
+  } else {
+    info += "-- ";
+  }
+
+  info += dancer.getRightDancer()->getNickname();
+
+  std::cout << info << std::endl;
 }
 
 void ConsoleChorbRoundDanceView::showError(const std::string& error) {

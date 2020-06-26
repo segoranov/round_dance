@@ -9,6 +9,11 @@ ChorbRoundDancePresenter::ChorbRoundDancePresenter(
 void ChorbRoundDancePresenter::onAddDancer(const std::string& newDancer,
                                            const std::string& leftDancer,
                                            const std::string& rightDancer) {
+  if (dance->getDancer(newDancer).has_value()) {
+    view->showError("Dancer '" + newDancer + "' already exists!");
+    return;
+  }
+
   const bool newDancerAddedSuccessfully =
       dance->addDancer(newDancer, leftDancer, rightDancer);
 
@@ -35,9 +40,18 @@ void ChorbRoundDancePresenter::onExit() {
   view->showMessage("Bye, bye... Thanks for playing the dance!\n");
 }
 
-void ChorbRoundDancePresenter::onShowDancerInfo(const std::string& dancer) {}
+void ChorbRoundDancePresenter::onShowDancerInfo(const std::string& dancer) {
+  auto optDancer = dance->getDancer(dancer);
+  if (!optDancer.has_value()) {
+    view->showMessage("The dancer " + dancer + " does not exist.");
+  } else {
+    view->showInfoAboutDancer(optDancer.value());
+  }
+}
 
-void ChorbRoundDancePresenter::onShowRoundDance(/* TODO param? */) {}
+void ChorbRoundDancePresenter::onShowRoundDance() {
+  view->showRoundDance(*dance);
+}
 
 void ChorbRoundDancePresenter::showPrompt(const std::string& prompt) {
   view->showPrompt(prompt);

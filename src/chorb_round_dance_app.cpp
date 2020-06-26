@@ -61,14 +61,24 @@ void ChorbRoundDanceApp::run() {
         break;
       }
 
-      case COMMAND::UNDEFINED: {
-        presenter.onUserError("Non existing command.");
+      case COMMAND::INFO: {
+        onInfoCommand(tokens);
+        break;
+      }
+
+      case COMMAND::PRINT: {
+        presenter.onShowRoundDance();
         break;
       }
 
       case COMMAND::EXIT: {
         presenter.onExit();
         stillRunning = false;
+        break;
+      }
+
+      case COMMAND::UNDEFINED: {
+        presenter.onUserError("Non existing command.");
         break;
       }
 
@@ -91,6 +101,17 @@ void ChorbRoundDanceApp::onAddCommand(const std::vector<std::string>& tokens) {
     const std::string& leftDancer = tokens[2];
     const std::string& rightDancer = tokens[3];
     presenter.onAddDancer(newDancer, leftDancer, rightDancer);
+  }
+}
+
+void ChorbRoundDanceApp::onInfoCommand(const std::vector<std::string>& tokens) {
+  // info <who>
+
+  if (tokens.size() != 2) {
+    presenter.onUserError("Invalid command.");
+  } else {
+    const std::string& dancer = tokens[1];
+    presenter.onShowDancerInfo(dancer);
   }
 }
 

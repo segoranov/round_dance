@@ -48,7 +48,7 @@ class ChorbRoundDance {
    * Returns the dancer if he exists in the dance; otherwise empty optional
    * TODO DV format/improve doc
    */
-  std::optional<ChorbDancer> getDancer(const std::string& dancer) const;
+  std::optional<ChorbDancer> getDancer(const std::string& dancer);
 
   // Returns them in the order in which they are grabbed
   // TODO DV format doc
