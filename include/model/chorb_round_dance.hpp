@@ -5,7 +5,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include "chorb_dancer.hpp"
+#include "model/chorb_dancer.hpp"
 
 // The direction in which a dancer grabs/releases another dancer.
 // For example a dancer can grab the dancer to the left, the dancer to the

@@ -1,4 +1,4 @@
-#include "chorb_dancer.hpp"
+#include "model/chorb_dancer.hpp"
 
 ChorbDancer::ChorbDancer(const std::string& nickname) : nickname{nickname} {}
 

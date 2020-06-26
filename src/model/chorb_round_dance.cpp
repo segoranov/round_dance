@@ -1,8 +1,8 @@
-#include "chorb_round_dance.hpp"
+#include "model/chorb_round_dance.hpp"
 
 #include <cassert>
 
-#include "chorb_dancer.hpp"
+#include "model/chorb_dancer.hpp"
 
 std::vector<ChorbDancer> ChorbRoundDance::getDancers() const {
   std::vector<ChorbDancer> result;

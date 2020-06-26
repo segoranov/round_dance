@@ -3,8 +3,8 @@
 
 #include <string>
 
-#include "chorb_dancer.hpp"
-#include "chorb_round_dance.hpp"
+#include "model/chorb_dancer.hpp"
+#include "model/chorb_round_dance.hpp"
 #include "view/chorb_round_dance_view.hpp"
 
 // TODO should we have an interface for the presenter?
