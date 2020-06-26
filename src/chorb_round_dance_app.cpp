@@ -7,24 +7,23 @@
 #include "chorb_round_dance_builder/chorb_round_dance_builder.hpp"
 #include "chorb_round_dance_builder/chorb_round_dance_director.hpp"
 #include "nickname_generator.hpp"
+#include "view/console_chorb_round_dance_view.hpp"
 
-ChorbRoundDanceApp::ChorbRoundDanceApp(ChorbRoundDanceView::UPtr view)
-    : view{std::move(view)} {}
+ChorbRoundDanceApp::ChorbRoundDanceApp(const std::string& file) {
+  auto dance = generateDance(file);
+  presenter = ChorbRoundDancePresenter{
+      dance, std::make_unique<ConsoleChorbRoundDanceView>()};
+}
 
-void ChorbRoundDanceApp::generateDance(const std::string& file) {
+ChorbRoundDance* ChorbRoundDanceApp::generateDance(const std::string& file) {
   std::ifstream ifs{file};
 
   if (!ifs.is_open()) {
-    const std::string error = "Could not open file: " + file;
-    view->showError(error);
     throw "Could not open file: " + file;  // TODO hierarchy of exceptions
   }
 
   auto nicknames = NicknameGenerator::fromStream(ifs);
   if (nicknames.size() < 3) {
-    const std::string error =
-        "The input file should contain at least 3 dancers!";
-    view->showError(error);
     // TODO hierarchy of exceptions
     throw "The input file should contain at least 3 dancers!";
   }
@@ -34,70 +33,76 @@ void ChorbRoundDanceApp::generateDance(const std::string& file) {
   StandartChorbRoundDanceBuilder builder;
   ChorbRoundDanceDirector director;
   director.setBuilder(&builder);
-  dance = director.createChorbRoundDance(nicknames);
-
-  std::string message =
-      "Created chorb round dance with the following dancers:\n";
-
-  for (const auto& dancer : dance->getDancers()) {
-    message += dancer.getNickname() + '\n';
-  }
-
-  view->showMessage(message);
+  return director.createChorbRoundDance(nicknames);
 }
 
 void ChorbRoundDanceApp::run() {
   std::string userInput;
-  while (true) {
-    view->showPrompt("Enter command");
 
-    // TODO who is responsible for gathering user input? (std::getline?)
-    // TODO What about Presenter?
+  volatile bool stillRunning = true;
+  while (stillRunning) {
+    presenter.showPrompt("Enter command");
     std::getline(std::cin, userInput);
 
     std::istringstream iss(userInput);
     std::vector<std::string> tokens{std::istream_iterator<std::string>{iss},
                                     std::istream_iterator<std::string>{}};
 
-    const std::string& command = tokens[0];
+    if (tokens.empty()) {
+      presenter.onUserError("You did not enter any command.");
+      continue;
+    }
 
-    // This is just to see something working. It's not
-    // comprehensive nor is it perfectly implemented.
-    // TODO create enum for commands and use switch/case
-    // TODO error handling
-    // TODO parsing in another class/method?
-    // TODO Add ChorbRoundDanceApp to uml diagram
-    if (command == "add") {
-      const std::string& newDancer = tokens[1];
-      const std::string& leftDancer = tokens[2];
-      const std::string& rightDancer = tokens[3];
+    COMMAND command = strToCommand(tokens[0]);
 
-      std::ostringstream oss;
-      oss << "Trying to add dancer [" << newDancer << "]"
-          << " between "
-          << "[" << leftDancer << "] and [" << rightDancer << "]";
-
-      view->showMessage(oss.str());
-
-      const bool newDancerAddedSuccessfully =
-          dance->addDancer(newDancer, leftDancer, rightDancer);
-
-      if (newDancerAddedSuccessfully) {
-        std::ostringstream oss;
-        oss << "Added new dancer between " << leftDancer << " and "
-            << rightDancer << "";
-        view->showMessage(oss.str());
-      } else {
-        view->showError(
-            "Could not add new dancer!");  // TODO print reason for failure?
+    switch (command) {
+      case COMMAND::ADD: {
+        onAddCommand(tokens);
+        break;
       }
 
-    } else if (command == "exit") {
-      break;
-    } else {
-      view->showMessage("Not implemented.");  // TODO
+      case COMMAND::UNDEFINED: {
+        presenter.onUserError("Non existing command.");
+        break;
+      }
+
+      case COMMAND::EXIT: {
+        presenter.onExit();
+        stillRunning = false;
+        break;
+      }
+
+      default: {
+        // TODO implement all commands
+        presenter.onUserError("Not implemented yet!");
+        break;
+      }
     }
   }
+}
 
-  view->showMessage("Bye, bye...");
+void ChorbRoundDanceApp::onAddCommand(const std::vector<std::string>& tokens) {
+  // add <who> <leftDancer> <rightDancer>
+
+  if (tokens.size() != 4) {
+    presenter.onUserError("Invalid command.");
+  } else {
+    const std::string& newDancer = tokens[1];
+    const std::string& leftDancer = tokens[2];
+    const std::string& rightDancer = tokens[3];
+    presenter.onAddDancer(newDancer, leftDancer, rightDancer);
+  }
+}
+
+ChorbRoundDanceApp::COMMAND ChorbRoundDanceApp::strToCommand(
+    const std::string& command) {
+  if (command == "add") return COMMAND::ADD;
+  if (command == "grab") return COMMAND::GRAB;
+  if (command == "release") return COMMAND::RELEASE;
+  if (command == "remove") return COMMAND::REMOVE;
+  if (command == "print") return COMMAND::PRINT;
+  if (command == "info") return COMMAND::INFO;
+  if (command == "exit") return COMMAND::EXIT;
+  if (command == "swap") return COMMAND::SWAP;
+  return COMMAND::UNDEFINED;
 }

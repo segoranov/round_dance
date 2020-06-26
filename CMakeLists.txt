@@ -12,7 +12,8 @@ add_executable(chorb_round_dance
   src/chorb_round_dance_builder/chorb_round_dance_director.cpp
   src/nickname_generator.cpp
   src/chorb_round_dance_app.cpp
-  src/view/console_chorb_round_dance_view.cpp)
+  src/view/console_chorb_round_dance_view.cpp
+  src/presenter/chorb_round_dance_presenter.cpp)
 
 set_property(TARGET chorb_round_dance PROPERTY CXX_STANDARD 20)
 

@@ -9,8 +9,7 @@ add_executable(chorb_round_dance_utest
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/chorb_round_dance.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/chorb_round_dance_builder/chorb_round_dance_builder.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/chorb_round_dance_builder/chorb_round_dance_director.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../src/nickname_generator.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../src/chorb_round_dance_app.cpp)
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/nickname_generator.cpp)
 
 set_property(TARGET chorb_round_dance_utest PROPERTY CXX_STANDARD 20)
 

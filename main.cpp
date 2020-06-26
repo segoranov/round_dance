@@ -15,7 +15,6 @@ int main(int argc, char** argv) {
 
   const std::string inputFile = argv[1];
 
-  ChorbRoundDanceApp app{std::make_unique<ConsoleChorbRoundDanceView>()};
-  app.generateDance(inputFile);
+  ChorbRoundDanceApp app{inputFile};
   app.run();
 }

@@ -5,18 +5,33 @@
 #include <string>
 #include <vector>
 
-#include "chorb_round_dance.hpp"
-#include "view/chorb_round_dance_view.hpp"
+#include "presenter/chorb_round_dance_presenter.hpp"
 
+// TODO Add ChorbRoundDanceApp to uml diagram
 class ChorbRoundDanceApp {
  private:
-  ChorbRoundDance* dance{nullptr};
-  ChorbRoundDanceView::UPtr view{nullptr};
+  ChorbRoundDancePresenter presenter;
+
+  ChorbRoundDance* generateDance(const std::string& file);
+
+  enum class COMMAND {
+    ADD,
+    REMOVE,
+    SWAP,
+    GRAB,
+    RELEASE,
+    EXIT,
+    INFO,
+    PRINT,
+    UNDEFINED,
+  };
+
+  COMMAND strToCommand(const std::string& command);
+
+  void onAddCommand(const std::vector<std::string>& tokens);
 
  public:
-  // TODO does the View belong in this class? What about Presenter?
-  explicit ChorbRoundDanceApp(ChorbRoundDanceView::UPtr view);
-  void generateDance(const std::string& file);
+  ChorbRoundDanceApp(const std::string& file);
   void run();
 };
 
