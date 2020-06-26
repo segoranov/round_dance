@@ -7,6 +7,7 @@
 class ChorbRoundDance;
 class ChorbDancer;
 
+// TODO Mock view and unit tests for the view?
 // The interface for the View
 class ChorbRoundDanceView {
  public:
