@@ -17,8 +17,8 @@ package Model {
   ChorbRoundDance --> "3" ChorbDancer
 
   note top of ChorbRoundDance
-  The hashmap helps making the add/remove/swap dancer operations O(1)
-  The dancers themselves make something like doubly-linked-list.
+    The hashmap helps making the add/remove/swap dancer operations O(1)
+    The dancers themselves make something like doubly-linked-list.
   end note
 
   enum Direction {
@@ -59,9 +59,9 @@ package Model {
   }
 
   note top of NicknameGenerator
-  Responsible for the generation of vector of strings (nicknames)
-  for the Builder from some kind of input, for example
-  file, DB, user input, etc...
+    Responsible for the generation of vector of strings (nicknames)
+    for the Builder from some kind of input, for example
+    file, DB, user input, etc...
   end note
 
   package Builder {
@@ -89,27 +89,18 @@ package Model {
 }
 
 package View {
-
-  interface RoundDanceView {
-    + showRoundDance(): void
+  interface ChorbRoundDanceView {
+    + showRoundDance(ChorbRoundDance): void
     + showInfoAboutDancer(dancerInfo: string): void
     + showError(errorMessage: string): void
   }
 
-  class ConsoleRoundDanceView implements RoundDanceView {
-    + showRoundDance(RoundDance): void
-    + showInfoAboutDancer(Dancer): void
-    + showError(errorMessage: string): void
+  class ConsoleChorbRoundDanceView implements ChorbRoundDanceView {
+    + showRoundDance(ChorbRoundDance): void
+    + showInfoAboutDancer(ChorbDancer): void
+    + showError(error: string): void
+    + showMessage(message: string)
   }
-
-  class MockView implements RoundDanceView {
-    + showRoundDance(RoundDance): void
-    + showInfoAboutDancer(Dancer): void
-    + showError(errorMessage: string): void
-  }
-
-  note top of MockView: Facilitates unit testing
-
 }
 
 package Presenter {
