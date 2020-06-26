@@ -38,8 +38,8 @@ ChorbRoundDance* ChorbRoundDanceApp::generateDance(const std::string& file) {
 
 void ChorbRoundDanceApp::run() {
   std::string userInput;
-
   volatile bool stillRunning = true;
+
   while (stillRunning) {
     presenter.showPrompt("Enter command");
     std::getline(std::cin, userInput);
