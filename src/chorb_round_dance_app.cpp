@@ -1,7 +1,6 @@
 #include "chorb_round_dance_app.hpp"
 
 #include <fstream>
-#include <iostream>
 #include <iterator>
 #include <sstream>
 
@@ -9,15 +8,23 @@
 #include "chorb_round_dance_builder/chorb_round_dance_director.hpp"
 #include "nickname_generator.hpp"
 
+ChorbRoundDanceApp::ChorbRoundDanceApp(ChorbRoundDanceView::UPtr view)
+    : view{std::move(view)} {}
+
 void ChorbRoundDanceApp::generateDance(const std::string& file) {
   std::ifstream ifs{file};
 
   if (!ifs.is_open()) {
+    const std::string error = "Could not open file: " + file;
+    view->showError(error);
     throw "Could not open file: " + file;  // TODO hierarchy of exceptions
   }
 
   auto nicknames = NicknameGenerator::fromStream(ifs);
   if (nicknames.size() < 3) {
+    const std::string error =
+        "The input file should contain at least 3 dancers!";
+    view->showError(error);
     // TODO hierarchy of exceptions
     throw "The input file should contain at least 3 dancers!";
   }
@@ -29,16 +36,23 @@ void ChorbRoundDanceApp::generateDance(const std::string& file) {
   director.setBuilder(&builder);
   dance = director.createChorbRoundDance(nicknames);
 
-  std::cout << "Created chorb round dance with the following dancers:\n";
+  std::string message =
+      "Created chorb round dance with the following dancers:\n";
+
   for (const auto& dancer : dance->getDancers()) {
-    std::cout << dancer.getNickname() << std::endl;
+    message += dancer.getNickname() + '\n';
   }
+
+  view->showMessage(message);
 }
 
 void ChorbRoundDanceApp::run() {
   std::string userInput;
   while (true) {
-    std::cout << "Enter command: ";
+    view->showPrompt("Enter command");
+
+    // TODO who is responsible for gathering user input? (std::getline?)
+    // TODO What about Presenter?
     std::getline(std::cin, userInput);
 
     std::istringstream iss(userInput);
@@ -52,30 +66,38 @@ void ChorbRoundDanceApp::run() {
     // TODO create enum for commands and use switch/case
     // TODO error handling
     // TODO parsing in another class/method?
-    // TODO View component instead of simple cout
     // TODO Add ChorbRoundDanceApp to uml diagram
     if (command == "add") {
       const std::string& newDancer = tokens[1];
       const std::string& leftDancer = tokens[2];
       const std::string& rightDancer = tokens[3];
-      std::cout << "Adding dancer [" << newDancer << "]"
-                << " between "
-                << "[" << leftDancer << "] and [" << rightDancer << "]\n";
+
+      std::ostringstream oss;
+      oss << "Trying to add dancer [" << newDancer << "]"
+          << " between "
+          << "[" << leftDancer << "] and [" << rightDancer << "]";
+
+      view->showMessage(oss.str());
 
       const bool newDancerAddedSuccessfully =
           dance->addDancer(newDancer, leftDancer, rightDancer);
 
       if (newDancerAddedSuccessfully) {
-        std::cout << "Added new dancer between " << leftDancer << " and "
-                  << rightDancer << "\n";
+        std::ostringstream oss;
+        oss << "Added new dancer between " << leftDancer << " and "
+            << rightDancer << "";
+        view->showMessage(oss.str());
       } else {
-        std::cout << "Could not add new dancer!\n";  // TODO maybe print reason?
+        view->showError(
+            "Could not add new dancer!");  // TODO print reason for failure?
       }
 
     } else if (command == "exit") {
       break;
     } else {
-      std::cout << "Not implemented.\n";  // TODO
+      view->showMessage("Not implemented.");  // TODO
     }
   }
+
+  view->showMessage("Bye, bye...");
 }

@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "chorb_round_dance_app.hpp"
+#include "view/console_chorb_round_dance_view.hpp"
 
 int main(int argc, char** argv) {
   if (argc != 2) {
@@ -14,15 +15,7 @@ int main(int argc, char** argv) {
 
   const std::string inputFile = argv[1];
 
-  try {
-    ChorbRoundDanceApp app;
-    app.generateDance(inputFile);
-    app.run();
-  } catch (const std::exception& exc) {  // TODO hierarchy of exceptions
-    std::cerr << "Error: " << exc.what() << std::endl;
-  } catch (...) {
-    std::cerr << "Unexpected error...\n";
-  }
-
-  std::cout << "Bye, bye...\n";
+  ChorbRoundDanceApp app{std::make_unique<ConsoleChorbRoundDanceView>()};
+  app.generateDance(inputFile);
+  app.run();
 }
