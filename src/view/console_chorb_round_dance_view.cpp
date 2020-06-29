@@ -19,18 +19,20 @@ void ConsoleChorbRoundDanceView::showInfoAboutDancer(
   info += dancer.getLeftDancer()->getNickname();
 
   if (dancer.hasGrabbedLeftDancer()) {
-    info += " <--";
+    info += " <-";
+  } else {
+    info += " --";
   }
 
   if (dancer.getLeftDancer()->hasGrabbedRightDancer()) {
-    info += "> ";
+    info += "-> ";
   } else {
     info += "- ";
   }
 
   info += dancer.getNickname();
 
-  if(dancer.getRightDancer()->hasGrabbedLeftDancer()) {
+  if (dancer.getRightDancer()->hasGrabbedLeftDancer()) {
     info += " <";
   } else {
     info += " -";
@@ -57,4 +59,16 @@ void ConsoleChorbRoundDanceView::showMessage(const std::string& message) {
 
 void ConsoleChorbRoundDanceView::showPrompt(const std::string& prompt) {
   std::cout << '\n' << prompt << "> ";
+}
+
+void ConsoleChorbRoundDanceView::showAvailableCommands() {
+  std::cout << "The available commands are:\n";
+  std::cout << "\tprint\n";
+  std::cout << "\tinfo <who|all>\n";
+  std::cout << "\tadd <who> <left dancer label> <right dancer label>\n";
+  std::cout << "\tremove <who>\n";
+  std::cout << "\tswap <who1> <who2>\n";
+  std::cout << "\tgrab <who> <left|right|both>\n";
+  std::cout << "\trelease <who> <left|right|both>\n";
+  std::cout << "\texit\n";
 }

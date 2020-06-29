@@ -11,6 +11,7 @@ class ConsoleChorbRoundDanceView : public ChorbRoundDanceView {
   virtual void showError(const std::string& error) override;
   virtual void showMessage(const std::string& message) override;
   virtual void showPrompt(const std::string& prompt) override;
+  virtual void showAvailableCommands() override;
 };
 
 #endif

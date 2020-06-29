@@ -40,8 +40,11 @@ void ChorbRoundDanceApp::run() {
   std::string userInput;
   volatile bool stillRunning = true;
 
+  presenter.showMessage("Hello and welcome to the chorb round dance app!\n");
+  presenter.showAvailableCommands();
+
   while (stillRunning) {
-    presenter.showPrompt("Enter command");
+    presenter.showPrompt("Enter command (type 'help' to show commands)");
     std::getline(std::cin, userInput);
 
     std::istringstream iss(userInput);
@@ -53,11 +56,40 @@ void ChorbRoundDanceApp::run() {
       continue;
     }
 
-    COMMAND command = strToCommand(tokens[0]);
+    COMMAND command;
+    try {
+      command = strToCommand(tokens[0]);
+    } catch (...) {  // TODO catch InvalidCommandException
+      presenter.onUserError("Non existing command.");
+      continue;
+    }
 
     switch (command) {
       case COMMAND::ADD: {
         onAddCommand(tokens);
+        break;
+      }
+
+      case COMMAND::REMOVE: {
+        onRemoveCommand(tokens);
+        break;
+      }
+
+      case COMMAND::GRAB: {
+        try {
+          onGrabCommand(tokens);
+        } catch (...) {  // TODO catch InvalidDircetionException
+          presenter.onUserError("Invalid direction");
+        }
+        break;
+      }
+
+      case COMMAND::RELEASE: {
+        try {
+          onReleaseCommand(tokens);
+        } catch (...) {  // TODO catch InvalidDircetionException
+          presenter.onUserError("Invalid direction");
+        }
         break;
       }
 
@@ -71,14 +103,14 @@ void ChorbRoundDanceApp::run() {
         break;
       }
 
-      case COMMAND::EXIT: {
-        presenter.onExit();
-        stillRunning = false;
+      case COMMAND::HELP: {
+        presenter.showAvailableCommands();
         break;
       }
 
-      case COMMAND::UNDEFINED: {
-        presenter.onUserError("Non existing command.");
+      case COMMAND::EXIT: {
+        presenter.onExit();
+        stillRunning = false;
         break;
       }
 
@@ -110,7 +142,49 @@ void ChorbRoundDanceApp::onInfoCommand(const std::vector<std::string>& tokens) {
   if (tokens.size() != 2) {
     presenter.onUserError("Invalid command.");
   } else {
+    const std::string& who = tokens[1];
+    if (who == "all") {
+      presenter.onShowAllDancersInfo();
+    } else {
+      presenter.onShowDancerInfo(who);
+    }
+  }
+}
+
+void ChorbRoundDanceApp::onRemoveCommand(
+    const std::vector<std::string>& tokens) {
+  // remove <who>
+
+  if (tokens.size() != 2) {
+    presenter.onUserError("Invalid command.");
+  } else {
     const std::string& dancer = tokens[1];
+    presenter.onRemoveDancer(dancer);
+  }
+}
+
+void ChorbRoundDanceApp::onReleaseCommand(
+    const std::vector<std::string>& tokens) {
+  // release <who> <left|right|both>
+  if (tokens.size() != 3) {
+    presenter.onUserError("Invalid command.");
+  } else {
+    const std::string& dancer = tokens[1];
+    Direction direction = strToDirection(tokens[2]);
+    presenter.onRelease(dancer, direction);
+    presenter.onShowDancerInfo(dancer);
+  }
+}
+
+void ChorbRoundDanceApp::onGrabCommand(const std::vector<std::string>& tokens) {
+  // grab <who> <left|right|both>
+
+  if (tokens.size() != 3) {
+    presenter.onUserError("Invalid command.");
+  } else {
+    const std::string& dancer = tokens[1];
+    Direction direction = strToDirection(tokens[2]);
+    presenter.onGrab(dancer, direction);
     presenter.onShowDancerInfo(dancer);
   }
 }
@@ -125,5 +199,13 @@ ChorbRoundDanceApp::COMMAND ChorbRoundDanceApp::strToCommand(
   if (command == "info") return COMMAND::INFO;
   if (command == "exit") return COMMAND::EXIT;
   if (command == "swap") return COMMAND::SWAP;
-  return COMMAND::UNDEFINED;
+  if (command == "help") return COMMAND::HELP;
+  throw "Undefined command";  // TODO UndefinedCommandException
+}
+
+Direction ChorbRoundDanceApp::strToDirection(const std::string& direction) {
+  if (direction == "left") return Direction::LEFT;
+  if (direction == "right") return Direction::RIGHT;
+  if (direction == "both") return Direction::BOTH;
+  throw "Invalid direction";  // TODO InvalidDirectionException
 }

@@ -22,13 +22,17 @@ class ChorbRoundDanceApp {
     EXIT,
     INFO,
     PRINT,
-    UNDEFINED,
+    HELP,
   };
 
   COMMAND strToCommand(const std::string& command);
+  Direction strToDirection(const std::string& direction);
 
   void onAddCommand(const std::vector<std::string>& tokens);
   void onInfoCommand(const std::vector<std::string>& tokens);
+  void onRemoveCommand(const std::vector<std::string>& tokens);
+  void onReleaseCommand(const std::vector<std::string>& tokens);
+  void onGrabCommand(const std::vector<std::string>& tokens);
 
  public:
   ChorbRoundDanceApp(const std::string& file);

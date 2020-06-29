@@ -27,17 +27,36 @@ void ChorbRoundDancePresenter::onAddDancer(const std::string& newDancer,
   }
 }
 
-void ChorbRoundDancePresenter::onRemoveDancer(const std::string& dancer) {}
+void ChorbRoundDancePresenter::onRemoveDancer(const std::string& dancer) {
+  const bool dancerRemoved = dance->removeDancer(dancer);
+
+  if (dancerRemoved && dance->getDancers().size() == 2) {
+    view->showMessage("...and the music stops!");
+    onExit();
+    return;
+  }
+
+  if (dancerRemoved) {
+    view->showMessage("Free at last!");
+  } else {
+    view->showMessage("This won't be so easy!");
+  }
+}
 
 void ChorbRoundDancePresenter::onGrab(const std::string& who,
-                                      Direction grabbingDirection) {}
+                                      Direction grabbingDirection) {
+  dance->grab(who, grabbingDirection);
+}
 
 void ChorbRoundDancePresenter::onRelease(const std::string& who,
-                                         Direction releaseDirection) {}
+                                         Direction releaseDirection) {
+  dance->release(who, releaseDirection);
+}
 
 void ChorbRoundDancePresenter::onExit() {
   delete dance;
   view->showMessage("Bye, bye... Thanks for playing the dance!\n");
+  std::exit(0); // TODO better exit code
 }
 
 void ChorbRoundDancePresenter::onShowDancerInfo(const std::string& dancer) {
@@ -49,6 +68,12 @@ void ChorbRoundDancePresenter::onShowDancerInfo(const std::string& dancer) {
   }
 }
 
+void ChorbRoundDancePresenter::onShowAllDancersInfo() {
+  for (const auto& dancer : dance->getDancers()) {
+    view->showInfoAboutDancer(dancer);
+  }
+}
+
 void ChorbRoundDancePresenter::onShowRoundDance() {
   view->showRoundDance(*dance);
 }
@@ -57,6 +82,14 @@ void ChorbRoundDancePresenter::showPrompt(const std::string& prompt) {
   view->showPrompt(prompt);
 }
 
+void ChorbRoundDancePresenter::showMessage(const std::string& message) {
+  view->showMessage(message);
+}
+
 void ChorbRoundDancePresenter::onUserError(const std::string& error) {
   view->showError(error);
+}
+
+void ChorbRoundDancePresenter::showAvailableCommands() {
+  view->showAvailableCommands();
 }

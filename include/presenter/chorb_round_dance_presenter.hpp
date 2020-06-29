@@ -26,11 +26,16 @@ class ChorbRoundDancePresenter {
   void onExit();
 
   void onShowDancerInfo(const std::string& dancer);
-  void onShowRoundDance(/* TODO param? */);
+  void onShowAllDancersInfo();
+  void onShowRoundDance();
+
+  void showMessage(const std::string& message);
 
   void showPrompt(const std::string& prompt);
 
   void onUserError(const std::string& error);
+
+  void showAvailableCommands();
 };
 
 #endif

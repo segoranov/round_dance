@@ -17,6 +17,7 @@ class ChorbRoundDanceView {
   virtual void showError(const std::string& error) = 0;
   virtual void showMessage(const std::string& message) = 0;
   virtual void showPrompt(const std::string& prompt) = 0;
+  virtual void showAvailableCommands() = 0;
 };
 
 #endif
