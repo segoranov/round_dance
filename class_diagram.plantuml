@@ -14,7 +14,7 @@ package Model {
     + getDancers(): vector<ChorbDancer>
   }
 
-  ChorbRoundDance --> "3" ChorbDancer
+  ChorbRoundDance --> "3..*" ChorbDancer
 
   note top of ChorbRoundDance
     The hashmap helps making the add/remove/swap dancer operations O(1)
@@ -107,7 +107,7 @@ package View {
 }
 
 package Presenter {
-  class RoundDancePresenter {
+  class ChorbRoundDancePresenter {
     + onAddDancer(Dancer)
     + onRemoveDancer(Dancer)
     + onSwapDancers(Dancer, Dancer)
@@ -119,4 +119,18 @@ package Presenter {
   }
 
 }
+
+class ChorbRoundDanceApp {
+  + constructor ChorbRoundDanceApp(input to initialize ChorbRoundDance)
+  + run()
+}
+
+note top of ChorbRoundDanceApp
+  - Constructs the initial chorb round dance from input like file or DB.
+  - Responsible for accepting and parsing of the user input,
+  and then delegating the commands to the presenter.
+end note
+
+ChorbRoundDanceApp --> "1" ChorbRoundDancePresenter
+
 @enduml

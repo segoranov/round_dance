@@ -7,7 +7,6 @@
 
 #include "presenter/chorb_round_dance_presenter.hpp"
 
-// TODO Add ChorbRoundDanceApp to uml diagram
 class ChorbRoundDanceApp {
  private:
   ChorbRoundDancePresenter presenter;
