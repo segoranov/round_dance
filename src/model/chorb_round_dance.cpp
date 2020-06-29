@@ -129,3 +129,82 @@ std::optional<ChorbDancer> ChorbRoundDance::getDancer(
     return mapNicknameToDancer[dancer];  // implicitly constructs optional
   }
 }
+
+void ChorbRoundDance::grab(const std::string& dancer,
+                           Direction grabbingDirection) {
+  checkDancerExists(dancer);
+  switch (grabbingDirection) {
+    case Direction::LEFT: {
+      mapNicknameToDancer[dancer].grabLeftDancer();
+      break;
+    }
+
+    case Direction::RIGHT: {
+      mapNicknameToDancer[dancer].grabRightDancer();
+      break;
+    }
+
+    case Direction::BOTH: {
+      mapNicknameToDancer[dancer].grabLeftDancer();
+      mapNicknameToDancer[dancer].grabRightDancer();
+      break;
+    }
+  }
+}
+
+void ChorbRoundDance::release(const std::string& dancer,
+                              Direction releaseDirection) {
+  checkDancerExists(dancer);
+  switch (releaseDirection) {
+    case Direction::LEFT: {
+      mapNicknameToDancer[dancer].releaseLeftDancer();
+      break;
+    }
+
+    case Direction::RIGHT: {
+      mapNicknameToDancer[dancer].releaseRightDancer();
+      break;
+    }
+
+    case Direction::BOTH: {
+      mapNicknameToDancer[dancer].releaseLeftDancer();
+      mapNicknameToDancer[dancer].releaseRightDancer();
+      break;
+    }
+  }
+}
+
+bool ChorbRoundDance::removeDancer(const std::string& dancer) {
+  checkDancerExists(dancer);
+
+  if (mapNicknameToDancer[dancer].hasGrabbedLeftDancer() ||
+      mapNicknameToDancer[dancer].hasGrabbedRightDancer() ||
+      mapNicknameToDancer[dancer].getLeftDancer()->hasGrabbedRightDancer() ||
+      mapNicknameToDancer[dancer].getRightDancer()->hasGrabbedLeftDancer()) {
+    return false;
+  }
+
+  ChorbDancer* toBeRemoved = &mapNicknameToDancer[dancer];
+  ChorbDancer* leftDancer =
+      &mapNicknameToDancer[toBeRemoved->getLeftDancer()->getNickname()];
+  ChorbDancer* rightDancer =
+      &mapNicknameToDancer[toBeRemoved->getRightDancer()->getNickname()];
+
+  // TODO Should left and right dancer grab themselves after removing the dancer
+  // in-between them. Not mentioned in SRS?
+  leftDancer->setRightDancer(rightDancer);
+  leftDancer->grabRightDancer();
+
+  rightDancer->setLeftDancer(leftDancer);
+  rightDancer->grabLeftDancer();
+
+  mapNicknameToDancer.erase(dancer);
+
+  if (toBeRemoved == firstDancer) {
+    firstDancer = rightDancer;
+  } else if (toBeRemoved == lastDancer) {
+    lastDancer = leftDancer;
+  }
+
+  return true;
+}
