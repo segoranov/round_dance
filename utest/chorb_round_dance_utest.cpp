@@ -262,3 +262,96 @@ SCENARIO("Adding dancer to built round dance is correct") {
     delete dance;
   }
 }
+
+TEST_CASE("Releasing and grabbing of dancers is correct") {
+  ChorbRoundDance* dance = createTestChorbRoundDance(5);
+
+  REQUIRE(dance->getDancer("dancer3")->hasGrabbedLeftDancer());
+  REQUIRE(dance->getDancer("dancer3")->hasGrabbedRightDancer());
+
+  // release and grab left dancer (dancer2 <--> dancer3)
+  dance->release("dancer3", Direction::LEFT);
+  REQUIRE(!dance->getDancer("dancer3")->hasGrabbedLeftDancer());
+  REQUIRE(dance->getDancer("dancer3")->hasGrabbedRightDancer());
+
+  dance->grab("dancer3", Direction::LEFT);
+  REQUIRE(dance->getDancer("dancer3")->hasGrabbedLeftDancer());
+  REQUIRE(dance->getDancer("dancer3")->hasGrabbedRightDancer());
+
+  // release and grab right dancer (dancer3 <--> dancer4)
+  dance->release("dancer3", Direction::RIGHT);
+  REQUIRE(!dance->getDancer("dancer3")->hasGrabbedRightDancer());
+  REQUIRE(dance->getDancer("dancer3")->hasGrabbedLeftDancer());
+
+  dance->grab("dancer3", Direction::RIGHT);
+  REQUIRE(dance->getDancer("dancer3")->hasGrabbedLeftDancer());
+  REQUIRE(dance->getDancer("dancer3")->hasGrabbedRightDancer());
+
+  // release both and grab both left and right
+  dance->release("dancer3", Direction::BOTH);
+  REQUIRE(!dance->getDancer("dancer3")->hasGrabbedRightDancer());
+  REQUIRE(!dance->getDancer("dancer3")->hasGrabbedLeftDancer());
+
+  dance->grab("dancer3", Direction::BOTH);
+  REQUIRE(dance->getDancer("dancer3")->hasGrabbedRightDancer());
+  REQUIRE(dance->getDancer("dancer3")->hasGrabbedLeftDancer());
+}
+
+SCENARIO("Removing a dancer from chorb round dance is correct") {
+  GIVEN("A round dance with 5 dancers") {
+    ChorbRoundDance* dance = createTestChorbRoundDance(5);
+
+    WHEN("We try to remove the 3rd dancer") {
+      THEN(
+          "The removal should fail because he is not released by his neighbors "
+          "and he has not released them") {
+        REQUIRE(!dance->removeDancer("dancer3"));
+      }
+    }
+
+    AND_WHEN("The 3rd dancer releases his neighbors and they release him") {
+      dance->release("dancer3", Direction::BOTH);
+      dance->release("dancer4", Direction::LEFT);
+      dance->release("dancer2", Direction::RIGHT);
+
+      THEN("The removal should be successful") {
+        REQUIRE(dance->removeDancer("dancer3"));
+
+        AND_THEN("The dance should have 4 dancers") {
+          REQUIRE(dance->getDancers().size() == 4);
+        }
+
+        AND_THEN(
+            "The dancers should have correct nicknames and be in correct "
+            "order") {
+          // We should have d1 <--> d2 <--> d4 <--> d5
+          auto dancers = dance->getDancers();
+          auto it = dancers.begin();
+          REQUIRE(it->getNickname() == "dancer1");
+          REQUIRE(it->getLeftDancer()->getNickname() == "dancer5");
+          REQUIRE(it->getRightDancer()->getNickname() == "dancer2");
+
+          ++it;
+          REQUIRE(it->getNickname() == "dancer2");
+          REQUIRE(it->getLeftDancer()->getNickname() == "dancer1");
+          REQUIRE(it->getRightDancer()->getNickname() == "dancer4");
+
+          ++it;
+          REQUIRE(it->getNickname() == "dancer4");
+          REQUIRE(it->getLeftDancer()->getNickname() == "dancer2");
+          REQUIRE(it->getRightDancer()->getNickname() == "dancer5");
+
+          ++it;
+          REQUIRE(it->getNickname() == "dancer5");
+          REQUIRE(it->getLeftDancer()->getNickname() == "dancer4");
+          REQUIRE(it->getRightDancer()->getNickname() == "dancer1");
+
+          ++it;
+          REQUIRE(it == dancers.end());
+        }
+      }
+    }
+
+    delete dance;
+  }
+}
