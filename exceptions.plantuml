@@ -1,0 +1,11 @@
+@startuml
+
+class std::runtime_exception
+
+class ChorbRoundDanceException extends std::runtime_exception
+
+class InvalidDirectionException extends ChorbRoundDanceException
+
+class InvalidCommandException extends ChorbRoundDanceException
+
+@enduml
