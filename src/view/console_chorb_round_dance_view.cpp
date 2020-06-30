@@ -63,7 +63,7 @@ void ConsoleChorbRoundDanceView::showPrompt(const std::string& prompt) {
 
 void ConsoleChorbRoundDanceView::showAvailableCommands() {
   std::cout << "The available commands are:\n";
-  std::cout << "\tprint\n";
+  std::cout << "\tprint -> prints all participants in the dance\n";
   std::cout << "\tinfo <who|all>\n";
   std::cout << "\tadd <who> <left dancer label> <right dancer label>\n";
   std::cout << "\tremove <who>\n";
