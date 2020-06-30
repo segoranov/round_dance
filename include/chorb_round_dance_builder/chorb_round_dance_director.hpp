@@ -8,14 +8,23 @@
 
 class ChorbRoundDanceDirector {
  private:
-  ChorbRoundDanceBuilder* builder;
+  ChorbRoundDanceBuilder* builder; 
 
  public:
+ /**
+  * @brief Set the Builder object
+  * 
+  * @param theBuilder 
+  */
   void setBuilder(ChorbRoundDanceBuilder* theBuilder);
 
-  // TODO DV doc
-  // Receives as input vector of nicknames and builds a chorb round dance out of
-  // them
+  
+  /**
+   * @brief Receives as input vector of nicknames and builds a chorb round dance out of them
+   * 
+   * @param nicknames 
+   * @return ChorbRoundDance* 
+   */
   ChorbRoundDance* createChorbRoundDance(
       const std::vector<std::string>& nicknames);
 };
