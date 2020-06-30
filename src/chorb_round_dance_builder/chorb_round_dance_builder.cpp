@@ -10,7 +10,7 @@ StandartChorbRoundDanceBuilder::StandartChorbRoundDanceBuilder() {
 
 void StandartChorbRoundDanceBuilder::addDancer(const std::string& nickname) {
   // TODO Check no more than 30 symbols nickname
-  // TODO Create hierarchy of exceptions to throw if more than 30
+  // TODO Implement and throw TooLongNicknameException if more than 30 symbols
 
   dancePtr->mapNicknameToDancer.insert({nickname, ChorbDancer{nickname}});
   ChorbDancer* newDancer = &(dancePtr->mapNicknameToDancer[nickname]);

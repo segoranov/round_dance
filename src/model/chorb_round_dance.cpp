@@ -96,9 +96,6 @@ bool ChorbRoundDance::addDancer(const std::string& newDancerNickname,
 bool ChorbRoundDance::areNeighbours(
     const std::string& dancer1Nickname,
     const std::string& dancer2Nickname) noexcept {
-  // TODO should we do check if they exist? Probably not, it's a private
-  // function.
-
   ChorbDancer* dancer1 = &mapNicknameToDancer[dancer1Nickname];
   ChorbDancer* dancer2 = &mapNicknameToDancer[dancer2Nickname];
 

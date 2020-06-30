@@ -35,13 +35,9 @@ class ChorbRoundDance {
   bool swap(const std::string& dancer1, const std::string& dancer2);
 
   // TODO DV add doc
-  // TODO SG/DV: We can throw exception here, for example
-  // DancerNotExistingException, when the dancer does not exist in the dance
   void grab(const std::string& dancer, Direction grabbingDirection);
 
   // TODO DV add doc
-  // TODO SG/DV: We can throw exception here, for example
-  // DancerNotExistingException, when the dancer does not exist in the dance
   void release(const std::string& dancer, Direction releaseDirection);
 
   /**
@@ -59,7 +55,8 @@ class ChorbRoundDance {
                      const std::string& dancer2) noexcept;
 
   // TODO DV doc
-  // Checks whether the dancer exists and if not, throws exception
+  // Checks whether the dancer exists and if not, throws NonExistingDancer
+  // exception
   void checkDancerExists(const std::string& nickname);
 };
 

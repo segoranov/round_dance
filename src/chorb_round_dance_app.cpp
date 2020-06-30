@@ -119,7 +119,7 @@ void ChorbRoundDanceApp::run() {
       }
 
       default: {
-        // TODO implement all commands
+        // TODO implement SWAP command
         presenter.onUserError("Not implemented yet!");
         break;
       }
