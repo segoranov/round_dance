@@ -13,7 +13,7 @@ class ChorbRoundDanceApp {
 
   ChorbRoundDance* generateDance(const std::string& file);
 
-  enum class COMMAND {
+  enum class Command {
     ADD,
     REMOVE,
     SWAP,
@@ -25,7 +25,7 @@ class ChorbRoundDanceApp {
     HELP,
   };
 
-  COMMAND strToCommand(const std::string& command);
+  Command strToCommand(const std::string& command);
   Direction strToDirection(const std::string& direction);
 
   void onAddCommand(const std::vector<std::string>& tokens);

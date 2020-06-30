@@ -56,7 +56,7 @@ void ChorbRoundDanceApp::run() {
       continue;
     }
 
-    COMMAND command;
+    Command command;
     try {
       command = strToCommand(tokens[0]);
     } catch (...) {  // TODO catch InvalidCommandException
@@ -65,17 +65,17 @@ void ChorbRoundDanceApp::run() {
     }
 
     switch (command) {
-      case COMMAND::ADD: {
+      case Command::ADD: {
         onAddCommand(tokens);
         break;
       }
 
-      case COMMAND::REMOVE: {
+      case Command::REMOVE: {
         onRemoveCommand(tokens);
         break;
       }
 
-      case COMMAND::GRAB: {
+      case Command::GRAB: {
         try {
           onGrabCommand(tokens);
         } catch (...) {  // TODO catch InvalidDircetionException
@@ -84,7 +84,7 @@ void ChorbRoundDanceApp::run() {
         break;
       }
 
-      case COMMAND::RELEASE: {
+      case Command::RELEASE: {
         try {
           onReleaseCommand(tokens);
         } catch (...) {  // TODO catch InvalidDircetionException
@@ -93,22 +93,22 @@ void ChorbRoundDanceApp::run() {
         break;
       }
 
-      case COMMAND::INFO: {
+      case Command::INFO: {
         onInfoCommand(tokens);
         break;
       }
 
-      case COMMAND::PRINT: {
+      case Command::PRINT: {
         presenter.onShowRoundDance();
         break;
       }
 
-      case COMMAND::HELP: {
+      case Command::HELP: {
         presenter.showAvailableCommands();
         break;
       }
 
-      case COMMAND::EXIT: {
+      case Command::EXIT: {
         presenter.onExit();
         stillRunning = false;
         break;
@@ -189,17 +189,17 @@ void ChorbRoundDanceApp::onGrabCommand(const std::vector<std::string>& tokens) {
   }
 }
 
-ChorbRoundDanceApp::COMMAND ChorbRoundDanceApp::strToCommand(
+ChorbRoundDanceApp::Command ChorbRoundDanceApp::strToCommand(
     const std::string& command) {
-  if (command == "add") return COMMAND::ADD;
-  if (command == "grab") return COMMAND::GRAB;
-  if (command == "release") return COMMAND::RELEASE;
-  if (command == "remove") return COMMAND::REMOVE;
-  if (command == "print") return COMMAND::PRINT;
-  if (command == "info") return COMMAND::INFO;
-  if (command == "exit") return COMMAND::EXIT;
-  if (command == "swap") return COMMAND::SWAP;
-  if (command == "help") return COMMAND::HELP;
+  if (command == "add") return Command::ADD;
+  if (command == "grab") return Command::GRAB;
+  if (command == "release") return Command::RELEASE;
+  if (command == "remove") return Command::REMOVE;
+  if (command == "print") return Command::PRINT;
+  if (command == "info") return Command::INFO;
+  if (command == "exit") return Command::EXIT;
+  if (command == "swap") return Command::SWAP;
+  if (command == "help") return Command::HELP;
   throw "Undefined command";  // TODO UndefinedCommandException
 }
 
