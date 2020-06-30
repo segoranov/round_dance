@@ -6,6 +6,7 @@
 
 #include "chorb_round_dance_builder/chorb_round_dance_builder.hpp"
 #include "chorb_round_dance_builder/chorb_round_dance_director.hpp"
+#include "model/round_dance_exceptions.hpp"
 #include "nickname_generator.hpp"
 #include "view/console_chorb_round_dance_view.hpp"
 
@@ -59,8 +60,9 @@ void ChorbRoundDanceApp::run() {
     Command command;
     try {
       command = strToCommand(tokens[0]);
-    } catch (...) {  // TODO catch InvalidCommandException
-      presenter.onUserError("Non existing command.");
+    } catch (const InvalidCommandException& ex) {
+      presenter.onUserError(
+          "Please enter valid command. Type 'help' for more info on commands.");
       continue;
     }
 
@@ -78,8 +80,9 @@ void ChorbRoundDanceApp::run() {
       case Command::GRAB: {
         try {
           onGrabCommand(tokens);
-        } catch (...) {  // TODO catch InvalidDircetionException
-          presenter.onUserError("Invalid direction");
+        } catch (const InvalidDirectionException& ex) {
+          presenter.onUserError(
+              "Please enter valid direction - <left|right|both>");
         }
         break;
       }
@@ -87,8 +90,9 @@ void ChorbRoundDanceApp::run() {
       case Command::RELEASE: {
         try {
           onReleaseCommand(tokens);
-        } catch (...) {  // TODO catch InvalidDircetionException
-          presenter.onUserError("Invalid direction");
+        } catch (const InvalidDirectionException& ex) {
+          presenter.onUserError(
+              "Please enter valid direction - <left|right|both>");
         }
         break;
       }
@@ -200,12 +204,12 @@ ChorbRoundDanceApp::Command ChorbRoundDanceApp::strToCommand(
   if (command == "exit") return Command::EXIT;
   if (command == "swap") return Command::SWAP;
   if (command == "help") return Command::HELP;
-  throw "Undefined command";  // TODO UndefinedCommandException
+  throw InvalidCommandException{};
 }
 
 Direction ChorbRoundDanceApp::strToDirection(const std::string& direction) {
   if (direction == "left") return Direction::LEFT;
   if (direction == "right") return Direction::RIGHT;
   if (direction == "both") return Direction::BOTH;
-  throw "Invalid direction";  // TODO InvalidDirectionException
+  throw InvalidDirectionException{};
 }
