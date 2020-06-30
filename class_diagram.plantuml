@@ -1,52 +1,136 @@
 @startuml
 package Model {
 
-class RoundDance{
-+ addDancer(dancer : string) : void
-+ removeDancer(dancer : string) : void
-+ swapDancers(leftDancer : string, rightDancer : string) : void 
-}
+  class ChorbRoundDance{
+    - hashMap: nickname -> ChorbDancer
+    - firstDancer: ChorbDancer*
+    - lastDancer: ChorbDancer*
+    + addDancer(newDancer: string, leftDancer : string, rightDancer : string): bool
+    + removeDancer(dancer: string): bool
+    + swapDancers(leftDancer: string, rightDancer : string): void
+    + grab(dancer: string, grabbingDircetion: Direction)
+    + release(dancer: string, releaseDirection: Direction)
+    + getDancer(dancer: nickname): ChorbDancer
+    + getDancers(): vector<ChorbDancer>
+  }
 
-class RoundDancer{
+  ChorbRoundDance --> "3..*" ChorbDancer
 
-}
+  note top of ChorbRoundDance
+    The hashmap helps making the add/remove/swap dancer operations O(1)
+    The dancers themselves make something like doubly-linked-list.
+  end note
+
+  enum Direction {
+    LEFT, RIGHT, BOTH
+  }
+
+  note top of Direction
+    The direction in which a dancer
+    grabs/releases another dancer.
+    For example a dancer can grab the dancer
+    to the left, the dancer to the right, or both.
+  end note
+
+  class ChorbDancer{
+    - nickname: string
+
+    - leftDancer: ChorbDancer*
+    - grabbedLeftDancer: bool {read, write}
+
+    - rightDancer: ChorbDancer*
+    - grabbedRightDancer: bool {read, write}
+
+    + ChorbDancer(nickname: string)
+
+    + grabLeftDancer(): void
+    + releaseLeftDancer(): void
+    + setLeftDancer(dancer: ChorbDancer* ): void
+    + getLeftDancer(): ChorbDancer*
+
+    + grabRightDancer(): void
+    + releaseRightDancer(): void
+    + setRightDancer(dancer: ChorbDancer* ): void
+    + getRightDancer(): ChorbDancer*
+  }
+
+  class NicknameGenerator {
+    + fromStream(is: iostream): vector<string> {static}
+  }
+
+  note top of NicknameGenerator
+    Responsible for the generation of vector of strings (nicknames)
+    for the Builder from some kind of input, for example
+    file, DB, user input, etc...
+  end note
+
+  package Builder {
+
+    class ChorbRoundDanceBuilder {
+      + addDancer(nickname: string) : void
+      + getRoundDance(): ChorbRoundDance*
+    }
+
+    class StandartChorbRoundDanceBuilder implements ChorbRoundDanceBuilder {
+      - dancePtr : ChorbRoundDance*
+      + addDancer(nickname: string) : void
+      + getRoundDance(): ChorbRoundDance*
+    }
+
+    class ChorbRoundDanceDirector {
+      + setBuilder(ChorbRoundDanceBuilder* theBuilder): void
+      + createChorbRoundDance(vector<string> nicknames): ChorbRoundDance*
+    }
+
+    ChorbRoundDanceDirector --> "1" ChorbRoundDanceBuilder
+
+  }
 
 }
 
 package View {
+  interface ChorbRoundDanceView {
+    + showRoundDance(ChorbRoundDance): void
+    + showInfoAboutDancer(ChorbDancer): void
+    + showError(error: string): void
+    + showMessage(message: string)
+    + showPrompt(prompt: string)
+  }
 
-interface RoundDanceView {
-+ showRoundDance() : void
-+ showInfoAboutDancer(dancerInfo: string) : void
-+ showError(errorMessage: string) : void
-}
-
-class ConsoleRoundDanceView implements RoundDanceView {
-+ showRoundDance(RoundDance) : void
-+ showInfoAboutDancer(Dancer) : void
-+ showError(errorMessage: string) : void
-}
-
-class MockView implements RoundDanceView {
-+ showRoundDance(RoundDance) : void
-+ showInfoAboutDancer(Dancer) : void
-+ showError(errorMessage: string) : void
-}
-note top of MockView: Facilitates unit testing
-
+  class ConsoleChorbRoundDanceView implements ChorbRoundDanceView {
+    + showRoundDance(ChorbRoundDance): void
+    + showInfoAboutDancer(ChorbDancer): void
+    + showError(error: string): void
+    + showMessage(message: string)
+    + showPrompt(prompt: string)
+  }
 }
 
 package Presenter {
-class RoundDancePresenter {
-+ onAddDancer(Dancer)
-+ onRemoveDancer(Dancer)
-+ onSwapDancers(Dancer, Dancer)
-+ onGrab(who, <left|right|both>)
-+ onRelease(who, <left|right|both>)
-+ onGetDancerInfo(Dancer)
-+ onShowRoundDance()
-+ onExit()
-}
+  class ChorbRoundDancePresenter {
+    + onAddDancer(Dancer)
+    + onRemoveDancer(Dancer)
+    + onSwapDancers(Dancer, Dancer)
+    + onGrab(who, <left|right|both>)
+    + onRelease(who, <left|right|both>)
+    + onGetDancerInfo(Dancer)
+    + onShowRoundDance()
+    + onExit()
+  }
 
 }
+
+class ChorbRoundDanceApp {
+  + constructor ChorbRoundDanceApp(input to initialize ChorbRoundDance)
+  + run()
+}
+
+note top of ChorbRoundDanceApp
+  - Constructs the initial chorb round dance from input like file or DB.
+  - Responsible for accepting and parsing of the user input,
+  and then delegating the commands to the presenter.
+end note
+
+ChorbRoundDanceApp --> "1" ChorbRoundDancePresenter
+
 @enduml
