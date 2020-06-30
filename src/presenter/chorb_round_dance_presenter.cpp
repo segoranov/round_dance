@@ -63,6 +63,17 @@ void ChorbRoundDancePresenter::onRelease(const std::string& who,
   }
 }
 
+void ChorbRoundDancePresenter::onSwap(const std::string& dancer1,
+                                      const std::string& dancer2) {
+  if (!dance->swap(dancer1, dancer2)) {
+    view->showError(
+        "Couldn't perform swap. Either the dancers are not neighbors or they "
+        "are not released by their neighbors.");
+  } else {
+    view->showMessage("Swap successful");
+  }
+}
+
 void ChorbRoundDancePresenter::onExit() {
   delete dance;
   view->showMessage("Bye, bye... Thanks for playing the dance!\n");

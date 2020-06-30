@@ -33,6 +33,7 @@ class ChorbRoundDanceApp {
   void onRemoveCommand(const std::vector<std::string>& tokens);
   void onReleaseCommand(const std::vector<std::string>& tokens);
   void onGrabCommand(const std::vector<std::string>& tokens);
+  void onSwapCommand(const std::vector<std::string>& tokens);
 
  public:
   ChorbRoundDanceApp(const std::string& file);
