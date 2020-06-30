@@ -427,3 +427,72 @@ SCENARIO("Removing a dancer from chorb round dance is correct") {
     }
   }
 }
+
+SCENARIO("Removing a dancer from chorb round dance is correct") {
+  GIVEN("A round dance with 5 dancers") {
+    ChorbRoundDance* dance = createTestChorbRoundDance(5);
+
+    WHEN("We try to swap the 3rd and 4th dancers") {
+      THEN(
+          "The swap should be unsuccessful because they are being held by "
+          "their neighbours") {
+        REQUIRE(!dance->swap("dancer3", "dancer4"));
+      }
+    }
+
+    WHEN("We try to swap the 2nd and 4th dancers") {
+      THEN("The swap should be unsuccessful because they are not neighbors") {
+        REQUIRE(!dance->swap("dancer3", "dancer4"));
+      }
+    }
+
+    WHEN("The 2nd dancer releases the 3rd dancer") {
+      dance->release("dancer2", Direction::RIGHT);
+
+      AND_WHEN("The 4th dancer releases the 3rd dancer") {
+        dance->release("dancer4", Direction::LEFT);
+      }
+
+      THEN(
+          "The swap of 3rd and 4th dancers should be successful, regardless of "
+          "the fact that they hold each other") {
+        REQUIRE(dance->swap("dancer3", "dancer4"));
+
+        AND_THEN(
+            "The dancers should have correct nicknames and be in correct "
+            "order") {
+          // We should have d1 <--> d2 <--> d4 <--> d3 <--> d5
+          auto dancers = dance->getDancers();
+          auto it = dancers.begin();
+          REQUIRE(it->getNickname() == "dancer1");
+          REQUIRE(it->getLeftDancer()->getNickname() == "dancer4");
+          REQUIRE(it->getRightDancer()->getNickname() == "dancer2");
+
+          ++it;
+          REQUIRE(it->getNickname() == "dancer2");
+          REQUIRE(it->getLeftDancer()->getNickname() == "dancer1");
+          REQUIRE(it->getRightDancer()->getNickname() == "dancer4");
+
+          ++it;
+          REQUIRE(it->getNickname() == "dancer4");
+          REQUIRE(it->getLeftDancer()->getNickname() == "dancer2");
+          REQUIRE(it->getRightDancer()->getNickname() == "dancer3");
+
+          ++it;
+          REQUIRE(it->getNickname() == "dancer3");
+          REQUIRE(it->getLeftDancer()->getNickname() == "dancer4");
+          REQUIRE(it->getRightDancer()->getNickname() == "dancer5");
+
+          ++it;
+          REQUIRE(it->getNickname() == "dancer5");
+          REQUIRE(it->getLeftDancer()->getNickname() == "dancer3");
+          REQUIRE(it->getRightDancer()->getNickname() == "dancer1");
+
+          ++it;
+          REQUIRE(it == dancers.end());
+        }
+      }
+    }
+    delete dance;
+  }
+}
