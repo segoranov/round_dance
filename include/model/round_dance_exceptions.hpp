@@ -25,4 +25,11 @@ class InvalidCommandException : public ChorbRoundDanceException {
       : ChorbRoundDanceException(message) {}
 };
 
+class NonExistingDancerException : public ChorbRoundDanceException {
+ public:
+  explicit NonExistingDancerException(
+      const std::string& message = "NonExistingDancerException")
+      : ChorbRoundDanceException(message) {}
+};
+
 #endif

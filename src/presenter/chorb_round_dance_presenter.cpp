@@ -2,6 +2,8 @@
 
 #include <sstream>
 
+#include "model/round_dance_exceptions.hpp"
+
 ChorbRoundDancePresenter::ChorbRoundDancePresenter(
     ChorbRoundDance* dance, ChorbRoundDanceView::UPtr view)
     : dance(dance), view(std::move(view)) {}
@@ -45,18 +47,26 @@ void ChorbRoundDancePresenter::onRemoveDancer(const std::string& dancer) {
 
 void ChorbRoundDancePresenter::onGrab(const std::string& who,
                                       Direction grabbingDirection) {
-  dance->grab(who, grabbingDirection);
+  try {
+    dance->grab(who, grabbingDirection);
+  } catch (const NonExistingDancerException& ex) {
+    view->showError("The dancer " + who + " does not exist!");
+  }
 }
 
 void ChorbRoundDancePresenter::onRelease(const std::string& who,
                                          Direction releaseDirection) {
-  dance->release(who, releaseDirection);
+  try {
+    dance->release(who, releaseDirection);
+  } catch (const NonExistingDancerException& ex) {
+    view->showError("The dancer " + who + " does not exist!");
+  }
 }
 
 void ChorbRoundDancePresenter::onExit() {
   delete dance;
   view->showMessage("Bye, bye... Thanks for playing the dance!\n");
-  std::exit(0); // TODO better exit code
+  std::exit(0);  // TODO better exit flow?
 }
 
 void ChorbRoundDancePresenter::onShowDancerInfo(const std::string& dancer) {

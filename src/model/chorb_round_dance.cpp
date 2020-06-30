@@ -3,6 +3,7 @@
 #include <cassert>
 
 #include "model/chorb_dancer.hpp"
+#include "model/round_dance_exceptions.hpp"
 
 std::vector<ChorbDancer> ChorbRoundDance::getDancers() const {
   std::vector<ChorbDancer> result;
@@ -116,8 +117,8 @@ bool ChorbRoundDance::areNeighbours(
 
 void ChorbRoundDance::checkDancerExists(const std::string& nickname) {
   if (!mapNicknameToDancer.contains(nickname)) {
-    throw "The dancer " + nickname + " does not exist in the dance!";
-    // TODO SG/DV create hierarchy of exceptions instead
+    throw NonExistingDancerException{"The dancer " + nickname +
+                                     " does not exist in the dance!"};
   }
 }
 

@@ -176,7 +176,6 @@ void ChorbRoundDanceApp::onReleaseCommand(
     const std::string& dancer = tokens[1];
     Direction direction = strToDirection(tokens[2]);
     presenter.onRelease(dancer, direction);
-    presenter.onShowDancerInfo(dancer);
   }
 }
 
@@ -189,7 +188,6 @@ void ChorbRoundDanceApp::onGrabCommand(const std::vector<std::string>& tokens) {
     const std::string& dancer = tokens[1];
     Direction direction = strToDirection(tokens[2]);
     presenter.onGrab(dancer, direction);
-    presenter.onShowDancerInfo(dancer);
   }
 }
 
