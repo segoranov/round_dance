@@ -1,5 +1,6 @@
 #include "model/chorb_round_dance.hpp"
 
+#include <algorithm>
 #include <cassert>
 
 #include "model/chorb_dancer.hpp"
@@ -201,6 +202,76 @@ bool ChorbRoundDance::removeDancer(const std::string& dancer) {
   if (toBeRemoved == firstDancer) {
     firstDancer = rightDancer;
   } else if (toBeRemoved == lastDancer) {
+    lastDancer = leftDancer;
+  }
+
+  return true;
+}
+
+bool ChorbRoundDance::swap(const std::string& dancer1,
+                           const std::string& dancer2) {
+  checkDancerExists(dancer1);
+  checkDancerExists(dancer2);
+
+  if (!areNeighbours(dancer1, dancer2)) {
+    return false;
+  }
+
+  // We know that dancer1 and dancer2 are neighbors at this
+  // point. Let's find out who is the left one and who is the right one.
+
+  ChorbDancer* leftDancer{nullptr};
+  ChorbDancer* rightDancer{nullptr};
+
+  if (mapNicknameToDancer[dancer2].getLeftDancer()->getNickname() == dancer1) {
+    leftDancer = &mapNicknameToDancer[dancer1];
+    rightDancer = &mapNicknameToDancer[dancer2];
+  } else {
+    leftDancer = &mapNicknameToDancer[dancer2];
+    rightDancer = &mapNicknameToDancer[dancer1];
+  }
+
+  ChorbDancer* leftLeftDancer =
+      &mapNicknameToDancer[leftDancer->getLeftDancer()->getNickname()];
+
+  ChorbDancer* rightRightDancer =
+      &mapNicknameToDancer[rightDancer->getRightDancer()->getNickname()];
+
+  // Explanation:
+  // If we have d1 d2 d3 d4 and we want to swap d3 and d2, then:
+  // d1 is leftLeftDancer
+  // d2 is leftDancer
+  // d3 is rightDancer
+  // d4 is rightRightDancer
+
+  if (leftLeftDancer->hasGrabbedRightDancer() ||
+      rightRightDancer->hasGrabbedLeftDancer()) {
+    // Cannot swap if they are grabbed by their neighbours
+    return false;
+  }
+
+  // The algorithm for swapping begins now, after we know we can do it
+
+  // We want to get from 'd1 d2 d3 d4' to 'd1 d3 d2 d4'
+  // The algorithm also works if we have only 3 dancers 'd1 d2 d3'
+
+  leftDancer->setLeftDancer(rightDancer);
+  leftDancer->setRightDancer(rightRightDancer);
+
+  rightDancer->setRightDancer(leftDancer);
+  rightDancer->setLeftDancer(leftLeftDancer);
+
+  leftLeftDancer->setRightDancer(rightDancer);
+  rightRightDancer->setLeftDancer(leftDancer);
+
+  if (firstDancer == rightDancer) {
+    // means we have swapped the first and the last one
+    std::swap(firstDancer, lastDancer);
+  } else if (firstDancer == leftDancer) {
+    // means we have swapped the first and the second one
+    firstDancer = rightDancer;
+  } else if (lastDancer == rightDancer) {
+    // means we have swapped the last and the before last dancer
     lastDancer = leftDancer;
   }
 
