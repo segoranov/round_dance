@@ -8,7 +8,7 @@
 
 class ChorbRoundDanceDirector {
  private:
-  ChorbRoundDanceBuilder* builder; 
+  ChorbRoundDanceBuilder* builder;
 
  public:
  /**
