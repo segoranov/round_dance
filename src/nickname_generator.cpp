@@ -15,7 +15,6 @@ std::vector<std::string> NicknameGenerator::fromStream(std::istream& is) {
   std::vector<std::string> result;
   std::string nickname;
   while (std::getline(is, nickname)) {
-    // TODO error handling? Or maybe not?
     result.push_back(nickname);
   }
 

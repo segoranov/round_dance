@@ -20,13 +20,13 @@ ChorbRoundDance* ChorbRoundDanceApp::generateDance(const std::string& file) {
   std::ifstream ifs{file};
 
   if (!ifs.is_open()) {
-    throw "Could not open file: " + file;  // TODO hierarchy of exceptions
+    throw ChorbRoundDanceException("Could not open file: " + file);
   }
 
   auto nicknames = NicknameGenerator::fromStream(ifs);
   if (nicknames.size() < 3) {
-    // TODO hierarchy of exceptions
-    throw "The input file should contain at least 3 dancers!";
+    throw ChorbRoundDanceException(
+        "The input file should contain at least 3 dancers!");
   }
 
   ifs.close();

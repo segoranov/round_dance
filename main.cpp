@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "chorb_round_dance_app.hpp"
+#include "model/round_dance_exceptions.hpp"
 #include "view/console_chorb_round_dance_view.hpp"
 
 int main(int argc, char** argv) {
@@ -15,6 +16,12 @@ int main(int argc, char** argv) {
 
   const std::string inputFile = argv[1];
 
-  ChorbRoundDanceApp app{inputFile};
-  app.run();
+  try {
+    ChorbRoundDanceApp app{inputFile};
+    app.run();
+  } catch (const ChorbRoundDanceException& exc) {
+    std::cout << exc.what() << std::endl;
+  } catch (...) {
+    std::cout << "Unhandled error. Sorry for the inconvenience.\n";
+  }
 }
