@@ -117,8 +117,12 @@ package Presenter {
     + onShowRoundDance()
     + onExit()
   }
-
 }
+
+note bottom of Presenter
+Middle mean between the
+View and the Model (MVP pattern)
+end note
 
 class ChorbRoundDanceApp {
   + constructor ChorbRoundDanceApp(input to initialize ChorbRoundDance)
