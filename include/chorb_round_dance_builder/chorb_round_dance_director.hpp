@@ -9,7 +9,7 @@
 //!  A ChorbRoundDanceDirector class. 
 class ChorbRoundDanceDirector {
  private:
-  ChorbRoundDanceBuilder* builder; 
+  ChorbRoundDanceBuilder* builder; /*!< Private pointer variable to the chorb round dance builder. */
 
  public:
  /**
@@ -19,7 +19,6 @@ class ChorbRoundDanceDirector {
   */
   void setBuilder(ChorbRoundDanceBuilder* theBuilder);
 
-  
   /**
    * @brief Public declaration of the function that receives as input vector of nicknames of type string 
    * and builds a chorb round dance out of them.

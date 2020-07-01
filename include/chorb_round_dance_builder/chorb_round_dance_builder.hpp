@@ -30,7 +30,7 @@ class StandartChorbRoundDanceBuilder : public ChorbRoundDanceBuilder {
   ChorbRoundDance* dancePtr; /*!< Private pointer variable to the chorb round dance. */
 
  public:
-  StandartChorbRoundDanceBuilder(); /*!< Public declaration of the parameterized constructor. */
+  StandartChorbRoundDanceBuilder(); /*!< Public declaration of the default constructor. */
 
   /**
    * @brief Public overriden declaration of the virtual function that receives as an input nickname 

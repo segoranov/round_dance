@@ -33,6 +33,7 @@ class ChorbRoundDance {
   ChorbDancer* lastDancer;
 
  public:
+ 
   /**
    * @brief Public declaration of boolean function that receives as an input the nicknames of the new, left and right dancers of type string.
    *  The function returns true if the addition of a dancer was successful. Otherwise it returns false.

@@ -93,18 +93,21 @@ class ChorbDancer {
    * 
    */
   void grabRightDancer();
+
   /**
    * @brief Public declaration of the function that releases right dancer.
    * 
    */
   void releaseRightDancer(); 
+
   /**
-   * @brief Public declaration of the function that receives as an input pointer to chorb dancer
+   * @brief Public declaration of the function that receives as an input pointer to chorb dancer.
    *  and sets the right dancer object.
    * 
    * @param dancer 
    */
   void setRightDancer(ChorbDancer* dancer); 
+  
   /**
    * @brief Public declaration of the function that gets the right dancer object.
    * 

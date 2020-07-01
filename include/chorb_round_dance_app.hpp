@@ -7,13 +7,17 @@
 
 #include "presenter/chorb_round_dance_presenter.hpp"
 
+//!  A ChorbRoundDanceApp class.
 class ChorbRoundDanceApp {
  private:
-  //! A private presenter variable of type ChorbRoundDancePresenter.
-  ChorbRoundDancePresenter presenter;
+  ChorbRoundDancePresenter presenter; /*!< A private presenter variable of type ChorbRoundDancePresenter. */
 
-  //! A private declaration of the function generateDance(const std::string& file).
-  /*! The function returns pointer to ChorbRoundDance */
+  /**
+   * @brief A private declaration of the function that generates the dance.
+   * 
+   * @param file 
+   * @return ChorbRoundDance* 
+   */
   ChorbRoundDance* generateDance(const std::string& file);
 
   //! A private enum class.
@@ -29,24 +33,78 @@ class ChorbRoundDanceApp {
     PRINT,
     HELP,
   };
-  //! A private declaration of the function strToCommand(const std::string& command).
-  /*! A function return type is Command, which is enum class.*/
+  
+  /**
+   * @brief A private declaration of the function that converts string to command.
+   * 
+   * @param command 
+   * @return Command 
+   */
   Command strToCommand(const std::string& command);
 
-  //! A private declaration of the function strToDirection(const std::string& direction).
-  /*! A function return type is Direction, which is enum class. */
+  /**
+   * @brief A private declaration of the function that converts string to direction.
+   * 
+   * @param direction 
+   * @return Direction 
+   */
   Direction strToDirection(const std::string& direction);
 
-  void onAddCommand(const std::vector<std::string>& tokens); /*!< Private declaration of the function onAddCommand(const std::vector<std::string>& tokens). */
-  void onInfoCommand(const std::vector<std::string>& tokens); /*!< Private declaration of the function onInfoCommand(const std::vector<std::string>& tokens). */
-  void onRemoveCommand(const std::vector<std::string>& tokens); /*!< Private declaration of the function onRemoveCommand(const std::vector<std::string>& tokens). */
-  void onReleaseCommand(const std::vector<std::string>& tokens); /*!< Private declaration of the function onReleaseCommand(const std::vector<std::string>& tokens). */
-  void onGrabCommand(const std::vector<std::string>& tokens); /*!< Private declaration of the function onGrabCommand(const std::vector<std::string>& tokens). */
-  void onSwapCommand(const std::vector<std::string>& tokens); /*!< Private declaration of the function onSwapCommand(const std::vector<std::string>& tokens). */
+  /**
+   * @brief Private declaration of the function that receives as an input vector of strings.
+   * 
+   * @param tokens 
+   */
+  void onAddCommand(const std::vector<std::string>& tokens); 
+
+    /**
+   * @brief Private declaration of the function that receives as an input vector of strings.
+   * 
+   * @param tokens 
+   */
+  void onInfoCommand(const std::vector<std::string>& tokens); 
+
+  /**
+   * @brief Private declaration of the function that receives as an input vector of strings.
+   * 
+   * @param tokens 
+   */
+  void onRemoveCommand(const std::vector<std::string>& tokens);
+
+  /**
+   * @brief Private declaration of the function that receives as an input vector of strings.
+   * 
+   * @param tokens 
+   */
+  void onReleaseCommand(const std::vector<std::string>& tokens); 
+
+  /**
+   * @brief Private declaration of the function that receives as an input vector of strings.
+   * 
+   * @param tokens 
+   */
+  void onGrabCommand(const std::vector<std::string>& tokens); 
+
+  /**
+   * @brief Private declaration of the function that receives as an input vector of strings.
+   * 
+   * @param tokens 
+   */
+  void onSwapCommand(const std::vector<std::string>& tokens); 
 
  public:
-  ChorbRoundDanceApp(const std::string& file); /*!< Public declaration of the parameterized constructor. */
-  void run(); /*!< Public declaration of the run function. */
+  /**
+  * @brief Public declaration of the parameterized constructor. Construct a new Chorb Round Dance App object
+  * 
+  * @param file 
+  */
+  ChorbRoundDanceApp(const std::string& file); 
+
+  /**
+   * @brief Public declaration of the run function.
+   * 
+   */
+  void run();
 };
 
 #endif
