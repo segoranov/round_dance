@@ -23,6 +23,7 @@ class ChorbRoundDancePresenter {
   void onRemoveDancer(const std::string& dancer);
   void onGrab(const std::string& who, Direction grabbingDirection);
   void onRelease(const std::string& who, Direction releaseDirection);
+  void onSwap(const std::string& dancer1, const std::string& dancer2);
   void onExit();
 
   void onShowDancerInfo(const std::string& dancer);

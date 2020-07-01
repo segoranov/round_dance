@@ -97,6 +97,11 @@ void ChorbRoundDanceApp::run() {
         break;
       }
 
+      case Command::SWAP: {
+        onSwapCommand(tokens);
+        break;
+      }
+
       case Command::INFO: {
         onInfoCommand(tokens);
         break;
@@ -188,6 +193,18 @@ void ChorbRoundDanceApp::onGrabCommand(const std::vector<std::string>& tokens) {
     const std::string& dancer = tokens[1];
     Direction direction = strToDirection(tokens[2]);
     presenter.onGrab(dancer, direction);
+  }
+}
+
+void ChorbRoundDanceApp::onSwapCommand(const std::vector<std::string>& tokens) {
+  // swap <who1> <who2>
+
+  if (tokens.size() != 3) {
+    presenter.onUserError("Invalid command.");
+  } else {
+    const std::string& dancer1 = tokens[1];
+    const std::string& dancer2 = tokens[2];
+    presenter.onSwap(dancer1, dancer2);
   }
 }
 
