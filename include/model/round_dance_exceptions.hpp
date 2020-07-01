@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include <string>
 
+//!  A ChorbRoundDanceException class that public inherits std::runtime_error.
 class ChorbRoundDanceException : public std::runtime_error {
  public:
   explicit ChorbRoundDanceException(
@@ -11,6 +12,7 @@ class ChorbRoundDanceException : public std::runtime_error {
       : std::runtime_error(message) {}
 };
 
+//!  A InvalidDirectionException class that public inherits ChorbRoundDanceException
 class InvalidDirectionException : public ChorbRoundDanceException {
  public:
   explicit InvalidDirectionException(
@@ -18,6 +20,7 @@ class InvalidDirectionException : public ChorbRoundDanceException {
       : ChorbRoundDanceException(message) {}
 };
 
+//!  A InvalidCommandException class that public inherits ChorbRoundDanceException
 class InvalidCommandException : public ChorbRoundDanceException {
  public:
   explicit InvalidCommandException(
@@ -25,6 +28,7 @@ class InvalidCommandException : public ChorbRoundDanceException {
       : ChorbRoundDanceException(message) {}
 };
 
+//!  A NonExistingDancerException class that public inherits ChorbRoundDanceException.
 class NonExistingDancerException : public ChorbRoundDanceException {
  public:
   explicit NonExistingDancerException(

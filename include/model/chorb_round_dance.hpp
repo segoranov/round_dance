@@ -13,18 +13,29 @@
  */
 enum class Direction { LEFT, RIGHT, BOTH };
 
+//!  A ChorbRoundDance class. 
 class ChorbRoundDance {
   friend class StandartChorbRoundDanceBuilder;
 
  private:
   std::unordered_map<std::string, ChorbDancer> mapNicknameToDancer; /*!< Gives a nickname to the dancer. */
 
-  ChorbDancer* firstDancer; /*!< First dancer in the chorb round dance */
-  ChorbDancer* lastDancer; /*!< Last dancer in the chorb round dance */
+  //!  A private pointer variable.
+  /*!
+       Pointer variable points to the first dancer in the chorb round dance.
+  */
+  ChorbDancer* firstDancer; 
+
+  //!  A private pointer variable.
+  /*!
+       Pointer variable points to the last dancer in the chorb round dance.
+  */
+  ChorbDancer* lastDancer;
 
  public:
   /**
-   * @brief Add dancer to chorb round dance.
+   * @brief Public declaration of boolean function that receives as an input the nicknames of the new, left and right dancers of type string.
+   *  The function returns true if the addition of a dancer was successful. Otherwise it returns false.
    * 
    * @param newDancerNickname 
    * @param leftDancerNickname 
@@ -37,7 +48,8 @@ class ChorbRoundDance {
                  const std::string& rightDancerNickname);
 
   /**
-   * @brief Remove dancer from chorb round dance.
+   * @brief Public declaration of boolean function that receives as an input the nickname of the dancer of type string
+   *  and returns true if the removal of a dancer was successful. Otherwise it returns false.
    * 
    * @param dancer 
    * @return true 
@@ -46,7 +58,8 @@ class ChorbRoundDance {
   bool removeDancer(const std::string& dancer);
 
   /**
-   * @brief Swap dancer1 with dancer2.
+   * @brief Public declaration of boolean function that receives as an input the nicknames of the dancer1 and dancer2 of type string.
+   *  The function returns true if the swap of a dancer was successful. Otherwise it returns false.
    * 
    * @param dancer1 
    * @param dancer2 
@@ -56,7 +69,8 @@ class ChorbRoundDance {
   bool swap(const std::string& dancer1, const std::string& dancer2);
 
   /**
-   * @brief The dancer grabs the hand of his left or right neighbor or both.
+   * @brief Public declaration of the function that receives as an input the nickname of the dancer of type string
+   *  and grabbing direction of type enum class Direction. The function grabs the hand of his left or right neighbor or both.
    * 
    * @param dancer 
    * @param grabbingDirection 
@@ -64,7 +78,8 @@ class ChorbRoundDance {
   void grab(const std::string& dancer, Direction grabbingDirection);
 
   /**
-   * @brief The dancer releases the hand of his left or right neighbor or both.
+   * @brief Public declaration of the function that receives as an input the nickname of the dancer of type string 
+   * and release direction of type enum class Direction. The function releases the hand of his left or right neighbor or both.
    * 
    * @param dancer 
    * @param releaseDirection 
@@ -72,7 +87,8 @@ class ChorbRoundDance {
   void release(const std::string& dancer, Direction releaseDirection);
 
   /**
-   * @brief Returns the dancer if he exists in the dance; otherwise empty optional
+   * @brief Returns the dancer if he exists in the dance.
+   *  Otherwise empty optional
    * 
    * @param dancer 
    * @return std::optional<ChorbDancer> 
@@ -80,7 +96,7 @@ class ChorbRoundDance {
   std::optional<ChorbDancer> getDancer(const std::string& dancer);
 
   /**
-   * @brief Returns them in the order in which they are grabbed.
+   * @brief Public declaration of the function that returns dancers in the order in which they are grabbed.
    * 
    * @return std::vector<ChorbDancer> 
    */
@@ -88,7 +104,8 @@ class ChorbRoundDance {
 
  private:
   /**
-   * @brief Checks if the two dancers are neighbors.
+   * @brief Private declaration of boolean function that receives as an input the nicknames of the dancer1 and dancer2 of type string.
+   *  The function returns true if the two dancers are neighbors the function. Otherwise returns false. The function does not throw exception.
    * 
    * @param dancer1 
    * @param dancer2 
@@ -99,7 +116,8 @@ class ChorbRoundDance {
                      const std::string& dancer2) noexcept;
 
   /**
-   * @brief Checks whether the dancer exists and if not, throws NonExistingDancer exception.
+   * @brief Private declaration of function that that receives as an input nickname of the dancer of type string and
+   *  checks whether the dancer exists and if not, throws NonExistingDancer exception.
    * 
    * @param nickname 
    */
