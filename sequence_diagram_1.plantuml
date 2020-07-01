@@ -1,0 +1,32 @@
+@startuml
+
+actor User
+participant ChorbRoundDanceApp order 1
+participant ChorbRoundDancePresenter order 2
+participant ChorbRoundDanceModel order 3
+participant ChorbRoundDanceView order 4
+
+User->ChorbRoundDanceApp: add newDancer D1 D2
+
+ChorbRoundDanceApp->ChorbRoundDanceApp: parse user command
+
+alt "User command is valid"
+    ChorbRoundDanceApp->ChorbRoundDancePresenter: onAddDancer(newDancer, D1, D2)
+    ChorbRoundDancePresenter->ChorbRoundDanceModel: Does dancer 'newDancer' already exist?
+
+    alt "The 'newDancer' does not exist (happy case)"
+        ChorbRoundDancePresenter->ChorbRoundDanceModel: addDancer(newDancer, D1, D2)
+        alt "Added new dancer successfully"
+            ChorbRoundDancePresenter->ChorbRoundDanceView: showMessage("Added dancer successfully")
+        else "Failed to add new dancer"
+            ChorbRoundDancePresenter->ChorbRoundDanceView: showError("Could not add dancer")
+        end
+    else "The 'newDancer' already exists"
+        ChorbRoundDancePresenter->ChorbRoundDanceView: showError("The dancer already exists")
+    end
+else "User command is invalid"
+    ChorbRoundDanceApp->ChorbRoundDancePresenter: onUserError("Invalid command")
+    ChorbRoundDancePresenter->ChorbRoundDanceView: showError("Invalid command")
+end
+
+@enduml
