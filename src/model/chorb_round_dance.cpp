@@ -42,18 +42,8 @@ bool ChorbRoundDance::addDancer(const std::string& newDancerNickname,
 
   // We know that dancer1Nickname and dancer2Nickname are neighbors at this
   // point. Let's find out who is the left one and who is the right one.
-
-  ChorbDancer* leftDancer{nullptr};
-  ChorbDancer* rightDancer{nullptr};
-
-  if (mapNicknameToDancer[dancer2Nickname].getLeftDancer()->getNickname() ==
-      dancer1Nickname) {
-    leftDancer = &mapNicknameToDancer[dancer1Nickname];
-    rightDancer = &mapNicknameToDancer[dancer2Nickname];
-  } else {
-    leftDancer = &mapNicknameToDancer[dancer2Nickname];
-    rightDancer = &mapNicknameToDancer[dancer1Nickname];
-  }
+  auto [leftDancer, rightDancer] =
+      getLeftAndRightDancers(dancer1Nickname, dancer2Nickname);
 
   // We begin the adding process.
   // Situation: d1 d2 d3(leftDancer) newDancer d4(rightDancer) d5 d6
@@ -219,17 +209,7 @@ bool ChorbRoundDance::swap(const std::string& dancer1,
 
   // We know that dancer1 and dancer2 are neighbors at this
   // point. Let's find out who is the left one and who is the right one.
-
-  ChorbDancer* leftDancer{nullptr};
-  ChorbDancer* rightDancer{nullptr};
-
-  if (mapNicknameToDancer[dancer2].getLeftDancer()->getNickname() == dancer1) {
-    leftDancer = &mapNicknameToDancer[dancer1];
-    rightDancer = &mapNicknameToDancer[dancer2];
-  } else {
-    leftDancer = &mapNicknameToDancer[dancer2];
-    rightDancer = &mapNicknameToDancer[dancer1];
-  }
+  auto [leftDancer, rightDancer] = getLeftAndRightDancers(dancer1, dancer2);
 
   ChorbDancer* leftLeftDancer =
       &mapNicknameToDancer[leftDancer->getLeftDancer()->getNickname()];
@@ -276,4 +256,20 @@ bool ChorbRoundDance::swap(const std::string& dancer1,
   }
 
   return true;
+}
+
+std::pair<ChorbDancer*, ChorbDancer*> ChorbRoundDance::getLeftAndRightDancers(
+    const std::string& dancer1, const std::string& dancer2) {
+  ChorbDancer* leftDancer{nullptr};
+  ChorbDancer* rightDancer{nullptr};
+
+  if (mapNicknameToDancer[dancer2].getLeftDancer()->getNickname() == dancer1) {
+    leftDancer = &mapNicknameToDancer[dancer1];
+    rightDancer = &mapNicknameToDancer[dancer2];
+  } else {
+    leftDancer = &mapNicknameToDancer[dancer2];
+    rightDancer = &mapNicknameToDancer[dancer1];
+  }
+
+  return {leftDancer, rightDancer};
 }

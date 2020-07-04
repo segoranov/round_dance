@@ -3,6 +3,7 @@
 
 #include <optional>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 #include "model/chorb_dancer.hpp"
@@ -58,6 +59,12 @@ class ChorbRoundDance {
   // Checks whether the dancer exists and if not, throws NonExistingDancer
   // exception
   void checkDancerExists(const std::string& nickname);
+
+  // Given two neighbours, returns a pair of dancers
+  // The first member of the pair is the left dancer, the second is the right
+  // dancer
+  std::pair<ChorbDancer*, ChorbDancer*> getLeftAndRightDancers(
+      const std::string& dancer1, const std::string& dancer2);
 };
 
 #endif
