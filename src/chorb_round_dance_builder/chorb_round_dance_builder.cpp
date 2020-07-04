@@ -16,26 +16,36 @@ void StandartChorbRoundDanceBuilder::addDancer(const std::string& nickname) {
   ChorbDancer* newDancer = &(dancePtr->mapNicknameToDancer[nickname]);
 
   if (dancePtr->mapNicknameToDancer.size() == 1) {
-    dancePtr->firstDancer = dancePtr->lastDancer = newDancer;
-    return;
+    addDancerWhenSizeIs1(newDancer);
+  } else if (dancePtr->mapNicknameToDancer.size() == 2) {
+    addDancerWhenSizeIs2(newDancer);
+  } else {
+    addDancerWhenSizeMoreThan2(newDancer);
   }
+}
 
-  if (dancePtr->mapNicknameToDancer.size() == 2) {
-    // firstDancer <---> newDancer
-    dancePtr->firstDancer->setRightDancer(newDancer);
-    dancePtr->firstDancer->grabRightDancer();
+void StandartChorbRoundDanceBuilder::addDancerWhenSizeIs1(
+    ChorbDancer* newDancer) {
+  dancePtr->firstDancer = dancePtr->lastDancer = newDancer;
+}
 
-    newDancer->setLeftDancer(dancePtr->firstDancer);
-    newDancer->grabLeftDancer();
+void StandartChorbRoundDanceBuilder::addDancerWhenSizeIs2(
+    ChorbDancer* newDancer) {
+  // firstDancer <---> newDancer
+  dancePtr->firstDancer->setRightDancer(newDancer);
+  dancePtr->firstDancer->grabRightDancer();
 
-    dancePtr->lastDancer = newDancer;
+  newDancer->setLeftDancer(dancePtr->firstDancer);
+  newDancer->grabLeftDancer();
 
-    return;
-  }
+  dancePtr->lastDancer = newDancer;
+}
 
+void StandartChorbRoundDanceBuilder::addDancerWhenSizeMoreThan2(
+    ChorbDancer* newDancer) {
   // clang-format off
 
-  // Our situation now looks like this:
+  // Our situation looks like this:
   // newDancer | <--> firstDancer <--> ... <--> previousLastDancer <--> newDancer <--> | firstDancer
 
   // clang-format on
