@@ -32,4 +32,11 @@ class NonExistingDancerException : public ChorbRoundDanceException {
       : ChorbRoundDanceException(message) {}
 };
 
+class TooLongNicknameException : public ChorbRoundDanceException {
+ public:
+  explicit TooLongNicknameException(
+      const std::string& message = "TooLongNicknameException")
+      : ChorbRoundDanceException(message) {}
+};
+
 #endif

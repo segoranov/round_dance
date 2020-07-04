@@ -1,5 +1,7 @@
 #include "chorb_round_dance_builder/chorb_round_dance_builder.hpp"
 
+#include "model/round_dance_exceptions.hpp"
+
 void ChorbRoundDanceBuilder::addDancer(const std::string& nickname) {}
 
 ChorbRoundDance* ChorbRoundDanceBuilder::getRoundDance() { return nullptr; }
@@ -9,8 +11,10 @@ StandartChorbRoundDanceBuilder::StandartChorbRoundDanceBuilder() {
 }
 
 void StandartChorbRoundDanceBuilder::addDancer(const std::string& nickname) {
-  // TODO Check no more than 30 symbols nickname
-  // TODO Implement and throw TooLongNicknameException if more than 30 symbols
+  if (nickname.size() > 30) {
+    throw TooLongNicknameException("Builder: Couldn't add dancer '" + nickname +
+                                   "'. Contains more than 30 symbols.");
+  }
 
   dancePtr->mapNicknameToDancer.insert({nickname, ChorbDancer{nickname}});
   ChorbDancer* newDancer = &(dancePtr->mapNicknameToDancer[nickname]);
