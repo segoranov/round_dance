@@ -3,6 +3,12 @@ project(ChorbRoundDance VERSION 0.1.0)
 
 set(CMAKE_BUILD_TYPE Debug)
 
+set(GCC_COVERAGE_COMPILE_FLAGS "-fprofile-arcs -ftest-coverage")
+set(GCC_COVERAGE_LINK_FLAGS    "-lgcov")
+
+set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
+set(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
+
 add_executable(chorb_round_dance_utest
     utest_main.cpp
     chorb_round_dance_utest.cpp
