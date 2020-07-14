@@ -3,18 +3,14 @@
 
 #include <string>
 
-// TODO DV Add documentation for below classes/methods where appropriate
-
-class ChorbDancer;
-
 class ChorbDancer {
  private:
   std::string nickname;
 
-  ChorbDancer* leftDancer{nullptr};
+  ChorbDancer* pLeftDancer{nullptr};
   bool grabbedLeftDancer{false};
 
-  ChorbDancer* rightDancer{nullptr};
+  ChorbDancer* pRightDancer{nullptr};
   bool grabbedRightDancer{false};
 
  public:

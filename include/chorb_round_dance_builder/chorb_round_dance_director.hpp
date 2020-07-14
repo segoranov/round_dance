@@ -13,9 +13,9 @@ class ChorbRoundDanceDirector {
  public:
   void setBuilder(ChorbRoundDanceBuilder* theBuilder);
 
-  // TODO DV doc
-  // Receives as input vector of nicknames and builds a chorb round dance out of
-  // them
+  /**
+   * Receives vector of nicknames and builds a chorb round dance out of then
+   */
   ChorbRoundDance* createChorbRoundDance(
       const std::vector<std::string>& nicknames);
 };

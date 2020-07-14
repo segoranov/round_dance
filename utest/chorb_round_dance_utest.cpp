@@ -7,7 +7,6 @@
 #include "chorb_round_dance_builder/chorb_round_dance_builder.hpp"
 #include "chorb_round_dance_builder/chorb_round_dance_director.hpp"
 
-// TODO DV doc
 // The below function is also a demo of the builder pattern
 // Example: If numberOfDancers is 3, the constructed dance will have dancers
 // with names "dancer1", "dancer2" and "dancer3"

@@ -8,11 +8,11 @@
 
 std::vector<ChorbDancer> ChorbRoundDance::getDancers() const {
   std::vector<ChorbDancer> result;
-  result.push_back(*firstDancer);
+  result.push_back(*pFirstDancer);
 
-  const ChorbDancer* currentDancer = firstDancer->getRightDancer();
+  const ChorbDancer* currentDancer = pFirstDancer->getRightDancer();
 
-  while (currentDancer != firstDancer) {
+  while (currentDancer != pFirstDancer) {
     result.push_back(*currentDancer);
     currentDancer = currentDancer->getRightDancer();
   }
@@ -20,9 +20,9 @@ std::vector<ChorbDancer> ChorbRoundDance::getDancers() const {
   return result;
 }
 
-bool ChorbRoundDance::addDancer(const std::string& newDancerNickname,
-                                const std::string& dancer1Nickname,
-                                const std::string& dancer2Nickname) {
+bool ChorbRoundDance::addDancer(const std::string& newDancer,
+                                const std::string& dancer1,
+                                const std::string& dancer2) {
   // Below implementation is O(1)
 
   // We should have at least 3 dancers so that the round dance can take place!
@@ -33,72 +33,69 @@ bool ChorbRoundDance::addDancer(const std::string& newDancerNickname,
 
   // Check whether dancers exist and throw exception if not
   // TODO create unit tests for below checks
-  checkDancerExists(dancer1Nickname);
-  checkDancerExists(dancer2Nickname);
+  checkDancerExists(dancer1);
+  checkDancerExists(dancer2);
 
-  if (!areNeighbours(dancer1Nickname, dancer2Nickname)) {
+  if (!areNeighbours(dancer1, dancer2)) {
     return false;
   }
 
-  // We know that dancer1Nickname and dancer2Nickname are neighbors at this
+  // We know that dancer1 and dancer2 are neighbors at this
   // point. Let's find out who is the left one and who is the right one.
-  auto [leftDancer, rightDancer] =
-      getLeftAndRightDancers(dancer1Nickname, dancer2Nickname);
+  auto [pLeftDancer, pRightDancer] = getLeftAndRightDancers(dancer1, dancer2);
 
   // We begin the adding process.
   // Situation: d1 d2 d3(leftDancer) newDancer d4(rightDancer) d5 d6
 
   // Add the newDancer in the hash map
-  mapNicknameToDancer.insert(
-      {newDancerNickname, ChorbDancer{newDancerNickname}});
+  mapNicknameToDancer.insert({newDancer, ChorbDancer{newDancer}});
 
   // Locate the newDancer
-  ChorbDancer* newDancer = &mapNicknameToDancer[newDancerNickname];
+  ChorbDancer* pNewDancer = &mapNicknameToDancer[newDancer];
 
   // Make the leftDancer grab the newDancer to the right
-  leftDancer->setRightDancer(newDancer);
-  leftDancer->grabRightDancer();
+  pLeftDancer->setRightDancer(pNewDancer);
+  pLeftDancer->grabRightDancer();
 
   // Make the newDancer grab the leftDancer to the left
-  newDancer->setLeftDancer(leftDancer);
-  newDancer->grabLeftDancer();
+  pNewDancer->setLeftDancer(pLeftDancer);
+  pNewDancer->grabLeftDancer();
 
   // Make the rightDancer grab the newDancer to the left
-  rightDancer->setLeftDancer(newDancer);
-  rightDancer->grabLeftDancer();
+  pRightDancer->setLeftDancer(pNewDancer);
+  pRightDancer->grabLeftDancer();
 
   // Make the newDancer grab the rightDancer to the right
-  newDancer->setRightDancer(rightDancer);
-  newDancer->grabRightDancer();
+  pNewDancer->setRightDancer(pRightDancer);
+  pNewDancer->grabRightDancer();
 
   // If added between the last and the first one,
   // the newDancer will be the last dancer from now on
   const bool addedBetweenLastAndFirst =
-      (leftDancer == lastDancer && rightDancer == firstDancer) ||
-      (leftDancer == firstDancer && rightDancer == lastDancer);
+      (pLeftDancer == pLastDancer && pRightDancer == pFirstDancer) ||
+      (pLeftDancer == pFirstDancer && pRightDancer == pLastDancer);
 
   if (addedBetweenLastAndFirst) {
-    lastDancer = newDancer;
+    pLastDancer = pNewDancer;
   }
 
   return true;
 }
 
-bool ChorbRoundDance::areNeighbours(
-    const std::string& dancer1Nickname,
-    const std::string& dancer2Nickname) noexcept {
-  ChorbDancer* dancer1 = &mapNicknameToDancer[dancer1Nickname];
-  ChorbDancer* dancer2 = &mapNicknameToDancer[dancer2Nickname];
+bool ChorbRoundDance::areNeighbours(const std::string& dancer1,
+                                    const std::string& dancer2) noexcept {
+  ChorbDancer* pDancer1 = &mapNicknameToDancer[dancer1];
+  ChorbDancer* pDancer2 = &mapNicknameToDancer[dancer2];
 
-  // true if dancer1Nickname is to the left of dancer2Nickname
+  // true if pDancer1 is to the left of pDancer2
   const bool orderedD1D2 =
-      dancer1->getRightDancer()->getNickname() == dancer2->getNickname() &&
-      dancer2->getLeftDancer()->getNickname() == dancer1->getNickname();
+      pDancer1->getRightDancer()->getNickname() == pDancer2->getNickname() &&
+      pDancer2->getLeftDancer()->getNickname() == pDancer1->getNickname();
 
-  // true if dancer1Nickname is to the right of dancer2Nickname
+  // true if pDancer1 is to the right of pDancer2
   const bool orderedD2D1 =
-      dancer1->getLeftDancer()->getNickname() == dancer2->getNickname() &&
-      dancer2->getRightDancer()->getNickname() == dancer1->getNickname();
+      pDancer1->getLeftDancer()->getNickname() == pDancer2->getNickname() &&
+      pDancer2->getRightDancer()->getNickname() == pDancer1->getNickname();
 
   return orderedD1D2 || orderedD2D1;
 }
@@ -174,25 +171,25 @@ bool ChorbRoundDance::removeDancer(const std::string& dancer) {
   }
 
   ChorbDancer* toBeRemoved = &mapNicknameToDancer[dancer];
-  ChorbDancer* leftDancer =
+  ChorbDancer* pLeftDancer =
       &mapNicknameToDancer[toBeRemoved->getLeftDancer()->getNickname()];
-  ChorbDancer* rightDancer =
+  ChorbDancer* pRightDancer =
       &mapNicknameToDancer[toBeRemoved->getRightDancer()->getNickname()];
 
   // TODO Should left and right dancer grab themselves after removing the dancer
   // in-between them. Not mentioned in SRS?
-  leftDancer->setRightDancer(rightDancer);
-  leftDancer->grabRightDancer();
+  pLeftDancer->setRightDancer(pRightDancer);
+  pLeftDancer->grabRightDancer();
 
-  rightDancer->setLeftDancer(leftDancer);
-  rightDancer->grabLeftDancer();
+  pRightDancer->setLeftDancer(pLeftDancer);
+  pRightDancer->grabLeftDancer();
 
   mapNicknameToDancer.erase(dancer);
 
-  if (toBeRemoved == firstDancer) {
-    firstDancer = rightDancer;
-  } else if (toBeRemoved == lastDancer) {
-    lastDancer = leftDancer;
+  if (toBeRemoved == pFirstDancer) {
+    pFirstDancer = pRightDancer;
+  } else if (toBeRemoved == pLastDancer) {
+    pLastDancer = pLeftDancer;
   }
 
   return true;
@@ -209,13 +206,13 @@ bool ChorbRoundDance::swap(const std::string& dancer1,
 
   // We know that dancer1 and dancer2 are neighbors at this
   // point. Let's find out who is the left one and who is the right one.
-  auto [leftDancer, rightDancer] = getLeftAndRightDancers(dancer1, dancer2);
+  auto [pLeftDancer, pRightDancer] = getLeftAndRightDancers(dancer1, dancer2);
 
-  ChorbDancer* leftLeftDancer =
-      &mapNicknameToDancer[leftDancer->getLeftDancer()->getNickname()];
+  ChorbDancer* pLeftLeftDancer =
+      &mapNicknameToDancer[pLeftDancer->getLeftDancer()->getNickname()];
 
-  ChorbDancer* rightRightDancer =
-      &mapNicknameToDancer[rightDancer->getRightDancer()->getNickname()];
+  ChorbDancer* pRightRightDancer =
+      &mapNicknameToDancer[pRightDancer->getRightDancer()->getNickname()];
 
   // Explanation:
   // If we have d1 d2 d3 d4 and we want to swap d3 and d2, then:
@@ -224,8 +221,8 @@ bool ChorbRoundDance::swap(const std::string& dancer1,
   // d3 is rightDancer
   // d4 is rightRightDancer
 
-  if (leftLeftDancer->hasGrabbedRightDancer() ||
-      rightRightDancer->hasGrabbedLeftDancer()) {
+  if (pLeftLeftDancer->hasGrabbedRightDancer() ||
+      pRightRightDancer->hasGrabbedLeftDancer()) {
     // Cannot swap if they are grabbed by their neighbours
     return false;
   }
@@ -235,24 +232,24 @@ bool ChorbRoundDance::swap(const std::string& dancer1,
   // We want to get from 'd1 d2 d3 d4' to 'd1 d3 d2 d4'
   // The algorithm also works if we have only 3 dancers 'd1 d2 d3'
 
-  leftDancer->setLeftDancer(rightDancer);
-  leftDancer->setRightDancer(rightRightDancer);
+  pLeftDancer->setLeftDancer(pRightDancer);
+  pLeftDancer->setRightDancer(pRightRightDancer);
 
-  rightDancer->setRightDancer(leftDancer);
-  rightDancer->setLeftDancer(leftLeftDancer);
+  pRightDancer->setRightDancer(pLeftDancer);
+  pRightDancer->setLeftDancer(pLeftLeftDancer);
 
-  leftLeftDancer->setRightDancer(rightDancer);
-  rightRightDancer->setLeftDancer(leftDancer);
+  pLeftLeftDancer->setRightDancer(pRightDancer);
+  pRightRightDancer->setLeftDancer(pLeftDancer);
 
-  if (firstDancer == rightDancer) {
+  if (pFirstDancer == pRightDancer) {
     // means we have swapped the first and the last one
-    std::swap(firstDancer, lastDancer);
-  } else if (firstDancer == leftDancer) {
+    std::swap(pFirstDancer, pLastDancer);
+  } else if (pFirstDancer == pLeftDancer) {
     // means we have swapped the first and the second one
-    firstDancer = rightDancer;
-  } else if (lastDancer == rightDancer) {
+    pFirstDancer = pRightDancer;
+  } else if (pLastDancer == pRightDancer) {
     // means we have swapped the last and the before last dancer
-    lastDancer = leftDancer;
+    pLastDancer = pLeftDancer;
   }
 
   return true;
@@ -260,16 +257,16 @@ bool ChorbRoundDance::swap(const std::string& dancer1,
 
 std::pair<ChorbDancer*, ChorbDancer*> ChorbRoundDance::getLeftAndRightDancers(
     const std::string& dancer1, const std::string& dancer2) {
-  ChorbDancer* leftDancer{nullptr};
-  ChorbDancer* rightDancer{nullptr};
+  ChorbDancer* pLeftDancer{nullptr};
+  ChorbDancer* pRightDancer{nullptr};
 
   if (mapNicknameToDancer[dancer2].getLeftDancer()->getNickname() == dancer1) {
-    leftDancer = &mapNicknameToDancer[dancer1];
-    rightDancer = &mapNicknameToDancer[dancer2];
+    pLeftDancer = &mapNicknameToDancer[dancer1];
+    pRightDancer = &mapNicknameToDancer[dancer2];
   } else {
-    leftDancer = &mapNicknameToDancer[dancer2];
-    rightDancer = &mapNicknameToDancer[dancer1];
+    pLeftDancer = &mapNicknameToDancer[dancer2];
+    pRightDancer = &mapNicknameToDancer[dancer1];
   }
 
-  return {leftDancer, rightDancer};
+  return {pLeftDancer, pRightDancer};
 }
